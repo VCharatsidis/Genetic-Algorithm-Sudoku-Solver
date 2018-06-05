@@ -1,9 +1,9 @@
 ﻿  Population.cpp
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\population.cpp(5): warning C4200: nonstandard extension used: zero-sized array in struct/union
-  c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\population.cpp(5): note: This member will be ignored by a defaulted constructor or copy/move assignment operator
+c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\population.cpp(21): warning C4101: 'boxes': unreferenced local variable
   Main.cpp
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\main.cpp(45): warning C4018: '<': signed/unsigned mismatch
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\main.cpp(55): warning C4018: '<': signed/unsigned mismatch
+c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\population.cpp(21): warning C4101: 'boxes': unreferenced local variable
+c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\main.cpp(76): warning C4018: '<': signed/unsigned mismatch
+c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\main.cpp(85): warning C4018: '<': signed/unsigned mismatch
   Genetic.cpp
   Box.cpp
   Board.cpp

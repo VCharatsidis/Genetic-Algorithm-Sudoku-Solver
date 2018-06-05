@@ -1,3 +1,7 @@
+
+#ifndef BOARD_H
+#define BOARD_H
+
 #include <vector>
 #include "Box.cpp"
 #include <string>
@@ -162,3 +166,5 @@ public:
 	}
 
 };
+
+#endif
