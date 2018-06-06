@@ -19,6 +19,7 @@ public:
 	Box* boxes[9][9];
 	vector<int> fixed_values[9];
 	vector<int> available_values[9];
+	vector<int> available_boxes[9];
 
 	Board() 
 	{
@@ -68,6 +69,9 @@ public:
 				if (boxes[i][j]->value != 0) 
 				{
 					boxes[i][j]->fixed = true;
+				}
+				else {
+					available_boxes[i].push_back(j);
 				}
 			}
 		}
