@@ -1,12 +1,13 @@
 ﻿  Population.cpp
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\population.cpp(21): warning C4101: 'boxes': unreferenced local variable
   Main.cpp
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\population.cpp(21): warning C4101: 'boxes': unreferenced local variable
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\main.cpp(76): warning C4018: '<': signed/unsigned mismatch
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\main.cpp(85): warning C4018: '<': signed/unsigned mismatch
-  Genetic.cpp
+c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\geneticsolver.cpp(65): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\geneticsolver.cpp(206): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  GeneticSolver.cpp
+c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\geneticsolver.cpp(65): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\geneticsolver.cpp(206): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   Box.cpp
   Board.cpp
   Generating Code...
+c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\geneticsolver.cpp(215): warning C4172: returning address of local variable or temporary: coords
   Genetic-Algorithm-Sudoku-Solver.vcxproj -> C:\Users\vcharatsidis\Documents\Visual Studio 2017\Projects\Genetic-Algorithm-Sudoku-Solver\Debug\Genetic-Algorithm-Sudoku-Solver.exe
   Genetic-Algorithm-Sudoku-Solver.vcxproj -> C:\Users\vcharatsidis\Documents\Visual Studio 2017\Projects\Genetic-Algorithm-Sudoku-Solver\Debug\Genetic-Algorithm-Sudoku-Solver.pdb (Partial PDB)
