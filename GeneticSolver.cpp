@@ -13,8 +13,7 @@ class GeneticSolver
 {
 public:
 	const int sudoku_size = 9;
-	const double mutation_rate = 0.5;
-	const int tournament_size = 5;
+	const double mutation_rate = 0.3;
 	const bool elitism = true;
 	Population pop = new Population(true);
 	Population next_gen = new Population(true);
@@ -121,12 +120,16 @@ public:
 
 	void cross_over(int parent_a, int parent_b, int child)
 	{
-		double prob = (rand() / double(RAND_MAX));
+		std::random_device rd;
+		std::mt19937 eng(rd());
+		std::uniform_real_distribution<double> unif(0, 1);
+
+		double prob = unif(eng);
 		int half = sudoku_size / 2;
 		//bool parent_a_top_half = i > half;
 		for (int i = 0; i < sudoku_size; i++)
 		{
-			if (prob > 0.5)
+			if (prob > 0.6)
 			{
 				for (int j = 0; j < sudoku_size; j++)
 				{
@@ -146,10 +149,14 @@ public:
 
 	void make_mutations()
 	{
+		std::random_device rd;
+		std::mt19937 eng(rd());
+		std::uniform_real_distribution<double> unif(0, 1);
+
 		//we mutate all except the best individual
 		for (int i = 0; i < population_size; i++)
 		{
-			double prob = (rand() / double(RAND_MAX));
+			double prob = unif(eng);
 
 			if (prob < mutation_rate)
 			{
