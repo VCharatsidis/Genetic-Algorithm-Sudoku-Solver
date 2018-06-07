@@ -124,7 +124,21 @@ int main()
 	std::cout << "" << std::endl;
 
 	solver.solve();*/
+	/*Board b = Board();
+	for (int i = 0; i < b.size; i++)
+	{
+		for (int j = 0; j < b.available_boxes[i].size(); j++)
+		{
+			cout << std::to_string(b.available_boxes[i][j])+" ";
+		}
+		cout << "" << endl;
+	}*/
 	GeneticSolver solver = GeneticSolver();
+	/*solver.make_new_population();
+	solver.print(solver.next_gen, 0);
+	solver.mutate(0);
+	solver.print(solver.next_gen, 0);*/
+
 	solver.solve();
 	return 0;
 }

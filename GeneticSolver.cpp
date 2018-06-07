@@ -13,7 +13,7 @@ class GeneticSolver
 {
 public:
 	const int sudoku_size = 9;
-	const double mutation_rate = 0.03;
+	const double mutation_rate = 0.5;
 	const int tournament_size = 5;
 	const bool elitism = true;
 	Population pop = new Population(true);
@@ -146,6 +146,7 @@ public:
 
 	void make_mutations()
 	{
+		//we mutate all except the best individual
 		for (int i = 0; i < population_size; i++)
 		{
 			double prob = (rand() / double(RAND_MAX));
@@ -226,7 +227,7 @@ public:
 					breeder_children++;
 				}	
 
-				if (breeder_children == 24) {
+				if (breeder_children == 25) {
 					break;
 				}
 			}
@@ -237,7 +238,11 @@ public:
 
 	void mutate(int individual) 
 	{
-		int row = rand() % 9;
+		std::random_device rd;
+		std::mt19937 eng(rd());
+		std::uniform_int_distribution<> distr(0, sudoku_size - 1);
+
+		int row = distr(eng);
 		swap(row, individual);		
 	}
 
@@ -251,14 +256,15 @@ public:
 		int a = distr(eng);
 		int b = distr(eng);
 
-		//std::cout << "int a " + std::to_string(a) << std::endl;
-		//std::cout << "int b " + std::to_string(b) << std::endl;
+		/*std::cout << "row " + std::to_string(row) << std::endl;
+		std::cout << "int a " + std::to_string(a) << std::endl;
+		std::cout << "int b " + std::to_string(b) << std::endl;*/
 
 		int index_a = board.available_boxes[row][a];
 		int index_b = board.available_boxes[row][b];
 
-		//std::cout << "index a " + std::to_string(index_a) << std::endl;
-		//std::cout << "index b " + std::to_string(index_b) << std::endl;
+		/*std::cout << "index a " + std::to_string(index_a) << std::endl;
+		std::cout << "index b " + std::to_string(index_b) << std::endl;*/
 
 		int temp = next_gen.population[individual][row][index_a]->value;
 		next_gen.population[individual][row][index_a]->value = next_gen.population[individual][row][index_b]->value;
