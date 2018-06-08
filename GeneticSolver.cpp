@@ -23,11 +23,24 @@ public:
 	int total_fitness_sum;
 	int count_breeds = 0;
 	int best_fitness = -100;
-	void solve() {
-		
+	
 
-		while (!solved) {
-			
+	bool threshold(int threshold_fitness)
+	{
+		bool other_strategy;
+		other_strategy = (best_fitness == threshold_fitness);
+
+		return other_strategy;
+	}
+
+	void solve() 
+	{
+		while (!solved) 
+		{
+			if (threshold(0))
+			{
+				mutation_rate = 1.0;
+			}
 			make_new_population();
 			make_mutations();
 
@@ -132,9 +145,14 @@ public:
 		double prob = unif(eng);
 		int half = sudoku_size / 2;
 		//bool parent_a_top_half = i > half;
+		double percentage_of_first_parent = 0.6;
+		if (best_fitness == 0)
+		{
+			percentage_of_first_parent = 1.0;
+		}
 		for (int i = 0; i < sudoku_size; i++)
 		{
-			if (prob > 0.6)
+			if (prob > percentage_of_first_parent)
 			{
 				for (int j = 0; j < sudoku_size; j++)
 				{
@@ -159,8 +177,13 @@ public:
 		std::uniform_real_distribution<double> unif(0, 1);
 
 		//we mutate all except the best individual
-		//if(best_fitness)
-		for (int i = 0; i < population_size; i++)
+		
+		int i = 0;
+		if (threshold(0))
+		{
+			i = 3;
+		}
+		for (i; i < population_size; i++)
 		{
 			double prob = unif(eng);
 
@@ -251,12 +274,22 @@ public:
 
 	void mutate(int individual) 
 	{
-		std::random_device rd;
-		std::mt19937 eng(rd());
-		std::uniform_int_distribution<> distr(0, sudoku_size - 1);
+		if (threshold(0))
+		{
+			for (int i = 0; i < sudoku_size; i++)
+			{
+				swap(i, individual);
+			}
+		}
+		else {
+			std::random_device rd;
+			std::mt19937 eng(rd());
+			std::uniform_int_distribution<> distr(0, sudoku_size - 1);
 
-		int row = distr(eng);
-		swap(row, individual);		
+			int row = distr(eng);
+			swap(row, individual);
+		}
+		
 	}
 
 	void swap(int row, int individual) {
