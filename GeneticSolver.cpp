@@ -13,7 +13,7 @@ class GeneticSolver
 {
 public:
 	const int sudoku_size = 9;
-	double mutation_rate = 0.5;
+	double mutation_rate = 0.1;
 	const bool elitism = true;
 	Population pop = new Population(true);
 	Population next_gen = new Population(true);
@@ -41,6 +41,7 @@ public:
 			{
 				mutation_rate = 1.0;
 			}
+
 			make_new_population();
 			make_mutations();
 
@@ -146,7 +147,8 @@ public:
 		int half = sudoku_size / 2;
 		//bool parent_a_top_half = i > half;
 		double percentage_of_first_parent = 0.6;
-		if (best_fitness == 0)
+
+		if (threshold(0))
 		{
 			percentage_of_first_parent = 1.0;
 		}
