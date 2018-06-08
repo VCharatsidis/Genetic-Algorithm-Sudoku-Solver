@@ -13,7 +13,7 @@ class GeneticSolver
 {
 public:
 	const int sudoku_size = 9;
-	const double mutation_rate = 0.3;
+	double mutation_rate = 0.3;
 	const bool elitism = true;
 	Population pop = new Population(true);
 	Population next_gen = new Population(true);
@@ -22,7 +22,7 @@ public:
 	int population_size = 100;
 	int total_fitness_sum;
 	int count_breeds = 0;
-
+	int best_fitness = -100;
 	void solve() {
 		
 
@@ -114,6 +114,10 @@ public:
 			std::cout << "solution is individual "+std::to_string(individual) << std::endl;
 			solved = true;
 		}
+		if (fitness > best_fitness)
+		{
+			best_fitness = fitness;
+		}
 		total_fitness_sum += fitness;
 		return fitness;
 	}
@@ -154,6 +158,7 @@ public:
 		std::uniform_real_distribution<double> unif(0, 1);
 
 		//we mutate all except the best individual
+		if(best_fitness)
 		for (int i = 0; i < population_size; i++)
 		{
 			double prob = unif(eng);
