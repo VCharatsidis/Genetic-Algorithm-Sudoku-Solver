@@ -13,7 +13,7 @@ class GeneticSolver
 {
 public:
 	const int sudoku_size = 9;
-	double mutation_rate = 0.3;
+	double mutation_rate = 0.5;
 	const bool elitism = true;
 	Population pop = new Population(true);
 	Population next_gen = new Population(true);
