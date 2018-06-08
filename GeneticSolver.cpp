@@ -41,6 +41,7 @@ public:
 				print(pop, 0);
 
 				std::cout << "fitness " + std::to_string(count_fitness(0, pop)) << std::endl;
+				std::cout << "best_fitness " + std::to_string(best_fitness) << std::endl;
 				std::cout << "generation " + std::to_string(count_breeds) << std::endl;
 				total_fitness_sum = 0;
 				for (int i = 0; i < population_size; i++)
@@ -158,7 +159,7 @@ public:
 		std::uniform_real_distribution<double> unif(0, 1);
 
 		//we mutate all except the best individual
-		if(best_fitness)
+		//if(best_fitness)
 		for (int i = 0; i < population_size; i++)
 		{
 			double prob = unif(eng);
