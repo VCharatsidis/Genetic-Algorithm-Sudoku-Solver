@@ -13,7 +13,7 @@ class GeneticSolver
 {
 public:
 	const int sudoku_size = 9;
-	double mutation_rate = 0.1;
+	double mutation_rate = 0.3;
 	const bool elitism = true;
 	Population pop = new Population(true);
 	Population next_gen = new Population(true);
@@ -96,30 +96,36 @@ public:
 		}
 		int container_size = sqrt(sudoku_size);
 
-		for (int row = 0; row < container_size; row++)
+		for (int row = 0; row < sudoku_size; row++)
 		{
-			for (int column = 0; column < container_size; column++)
+			for (int column = 0; column < sudoku_size; column++)
 			{
 				int value_box = pop.population[individual][row][column]->value;
 
 				int container_x = find_container_starting_box(row, column)[0];
 				int container_y = find_container_starting_box(row, column)[1];
 
-				int start_row = container_x + row;
+				int start_row = row;
 				int end_row = container_size + container_x;
 
 				for (int other_row = start_row; other_row < end_row; other_row++)
 				{
-					int start_col = container_y + column;
+					int start_col = container_y;
 					int end_col = container_size + container_y;
 
 					for (int other_column = start_col; other_column < end_col; other_column++)
 					{
-						int value_other = pop.population[individual][other_row][other_column]->value;
-
-						if (value_box == value_other)
+						if ((row == other_row) && (column == other_column)) {
+							continue;
+						}
+						else
 						{
-							fitness--;
+							int value_other = pop.population[individual][other_row][other_column]->value;
+
+							if (value_box == value_other)
+							{
+								fitness--;
+							}
 						}
 					}
 				}
@@ -144,17 +150,29 @@ public:
 		std::uniform_real_distribution<double> unif(0, 1);
 
 		double prob = unif(eng);
+		//double percentage_of_first_parent = 0.5;
+
 		int half = sudoku_size / 2;
-		//bool parent_a_top_half = i > half;
-		double percentage_of_first_parent = 0.6;
+		
 
 		if (threshold(0))
 		{
-			percentage_of_first_parent = 1.0;
+			//percentage_of_first_parent = 1.0;
 		}
 		for (int i = 0; i < sudoku_size; i++)
 		{
-			if (prob > percentage_of_first_parent)
+			bool parent_a_top_half;
+			if (prob > 0.5)
+			{
+				parent_a_top_half = (i > 5);
+			}
+			else
+			{
+				parent_a_top_half = (i <= 5);
+			}
+
+
+			if (parent_a_top_half)
 			{
 				for (int j = 0; j < sudoku_size; j++)
 				{
@@ -290,6 +308,9 @@ public:
 
 			int row = distr(eng);
 			swap(row, individual);
+
+			int row2 = distr(eng);
+			swap(row2, individual);
 		}
 		
 	}

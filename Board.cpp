@@ -32,7 +32,7 @@ public:
 			}
 		}
 		//EASY SUDOKU
-		boxes[0][0]->value = 4;
+		/*boxes[0][0]->value = 4;
 		boxes[0][2]->value = 1;
 		boxes[0][3]->value = 2;
 		boxes[0][4]->value = 9;
@@ -75,10 +75,10 @@ public:
 		boxes[8][4]->value = 6;
 		boxes[8][5]->value = 5;
 		boxes[8][6]->value = 1;
-		boxes[8][8]->value = 7;
+		boxes[8][8]->value = 7;*/
 
 		//HARDEST SUDOKU
-		/*boxes[0][0]->value = 8;
+		boxes[0][0]->value = 8;
 
 		boxes[1][2]->value = 3;
 		boxes[1][3]->value = 6;
@@ -106,7 +106,7 @@ public:
 		boxes[7][7]->value = 1;
 
 		boxes[8][1]->value = 9;
-		boxes[8][6]->value = 4;*/
+		boxes[8][6]->value = 4;
 
 		for (int i = 0; i < size; i++) 
 		{
