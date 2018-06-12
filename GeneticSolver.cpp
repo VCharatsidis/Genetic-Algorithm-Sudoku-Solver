@@ -13,7 +13,7 @@ class GeneticSolver
 {
 public:
 	const int sudoku_size = 9;
-	double mutation_rate = 0.4;
+	double mutation_rate = 0.7;
 	const bool elitism = true;
 	Population pop = new Population(true);
 	Population next_gen = new Population(true);
@@ -160,7 +160,8 @@ public:
 		fitness += count_column_errors(individual, pop);
 		fitness += count_container_errors(individual, pop);
 		
-		if (fitness == 0) {
+		if (fitness == 0)
+		{
 			std::cout << "solution is individual "+std::to_string(individual) << std::endl;
 			solved = true;
 		}
@@ -168,7 +169,9 @@ public:
 		{
 			best_fitness = fitness;
 		}
+
 		total_fitness_sum += fitness;
+
 		return fitness;
 	}
 
@@ -252,6 +255,7 @@ public:
 	void calculate_fitnesses(std::priority_queue<Fitness_index_pair*, vector<Fitness_index_pair*>, Comparator>& fitnesses)
 	{
 		total_fitness_sum = 0;
+
 		for (int i = 0; i < population_size; i++)
 		{
 			Fitness_index_pair* fi = new Fitness_index_pair();
@@ -356,7 +360,6 @@ public:
 			}
 			swap(row2, individual);
 
-	
 		}
 		
 	}
@@ -375,9 +378,8 @@ public:
 		int column_a = board.available_boxes[row][a];
 		int column_b = board.available_boxes[row][b];
 
-		//get_value(individual, next_gen, row, column_a);
-		int temp = next_gen.population[individual][row][column_a]->value;
-		next_gen.population[individual][row][column_a]->value = next_gen.population[individual][row][column_b]->value;
+		int temp = get_value(individual, next_gen, row, column_a);
+		next_gen.population[individual][row][column_a]->value = get_value(individual, next_gen, row, column_b);
 		next_gen.population[individual][row][column_b]->value = temp;
 	}
 
@@ -387,7 +389,7 @@ public:
 		{
 			for (int j = 0; j < sudoku_size; j++)
 			{
-				a.population[individual][i][j]->value = b.population[index][i][j]->value;
+				a.population[individual][i][j]->value = get_value(index, b, i, j);
 			}
 		}
 	}
