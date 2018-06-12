@@ -13,36 +13,23 @@ class GeneticSolver
 {
 public:
 	const int sudoku_size = 9;
-	double mutation_rate = 0.7;
+	double mutation_rate = 0.5;
 	const bool elitism = true;
 	Population pop = new Population(true);
 	Population next_gen = new Population(true);
-	Board board = Board();
 	bool solved = false;
+	Board board = Board();
 	int population_size = 100;
 	double total_fitness_sum;
-	int count_breeds = 0;
+	int generations = 0;
 	int best_fitness = -100;
 	
-
-	bool threshold(int threshold_fitness)
-	{
-		bool other_strategy;
-		other_strategy = (best_fitness == threshold_fitness);
-
-		return other_strategy;
-	}
-
 	void solve() 
 	{
 		while (!solved) 
 		{
-			if (threshold(0))
-			{
-				mutation_rate = 1.0;
-			}
-
 			make_new_population();
+
 			make_mutations();
 
 			for (int i = 0; i < population_size; i++)
@@ -50,14 +37,15 @@ public:
 				store_individual(i, i, pop, next_gen);
 			}	
 
-			if (count_breeds % 10000 == 0) 
+			if (generations % 10000 == 0) 
 			{
 				print(pop, 0);
 
 				std::cout << "fitness " + std::to_string(count_fitness(0, pop)) << std::endl;
 				std::cout << "best_fitness " + std::to_string(best_fitness) << std::endl;
-				std::cout << "generation " + std::to_string(count_breeds) << std::endl;
+				std::cout << "generation " + std::to_string(generations) << std::endl;
 				total_fitness_sum = 0;
+
 				for (int i = 0; i < population_size; i++)
 				{
 					std::cout << " ind "+std::to_string(i)+" : " + std::to_string(count_fitness(i, next_gen));
@@ -68,7 +56,7 @@ public:
 				std::cout << "" << std::endl;
 			}
 
-			count_breeds++;
+			generations++;
 		}
 
 		print(next_gen, 0);
@@ -116,8 +104,8 @@ public:
 
 	int count_container_value_reapearences(int individual, Population& pop, int row, int column)
 	{
-		int container_size = sqrt(sudoku_size);
 		int value_reapearences = 0;
+		int container_size = sqrt(sudoku_size);
 		int value_box = get_value(individual, pop, row, column);
 
 		int container_starting_row = find_container_starting_box(row, column)[0];
@@ -137,7 +125,9 @@ public:
 				{
 					int value_other = get_value(individual, pop, other_row, other_column);
 
-					if (value_box == value_other)
+					bool reapearance = (value_box == value_other);
+
+					if (reapearance)
 					{
 						value_reapearences--;
 					}
@@ -165,6 +155,7 @@ public:
 			std::cout << "solution is individual "+std::to_string(individual) << std::endl;
 			solved = true;
 		}
+
 		if (fitness > best_fitness)
 		{
 			best_fitness = fitness;
@@ -186,15 +177,11 @@ public:
 
 		bool top_6_rows_parent_a = false;
 
-		if (prob > 0.4)
+		if (prob > 0.3)
 		{
 			top_6_rows_parent_a = true;
 		}
 
-		if (threshold(0))
-		{
-			//percentage_of_first_parent = 1.0;
-		}
 		for (int row = 0; row < sudoku_size; row++)
 		{
 			if (top_6_rows_parent_a)
@@ -235,13 +222,8 @@ public:
 		std::uniform_real_distribution<double> unif(0, 1);
 
 		//we mutate all except the best individual
-		
-		int individual = 0;
-		if (threshold(0))
-		{
-			individual = 3;
-		}
-		for (individual; individual < population_size; individual++)
+
+		for (int individual = 0; individual < population_size; individual++)
 		{
 			double prob = unif(eng);
 
@@ -266,6 +248,28 @@ public:
 		}
 	}
 
+	void calculate_fittest_individuals(std::priority_queue<Fitness_index_pair*, vector<Fitness_index_pair*>, Comparator>& fitnesses,
+										vector<int>& fittest_individuals_indexes)
+	{
+		int count = 0;
+
+		while (!fitnesses.empty())
+		{
+			Fitness_index_pair* fip = fitnesses.top();
+
+			int individual_index = fitnesses.top()->index;
+
+			fittest_individuals_indexes.push_back(individual_index);
+
+			store_individual(count, individual_index, next_gen, pop);
+			
+			count++;
+
+			fitnesses.pop();
+			delete fip;
+		}
+	}
+
 	void make_new_population()
 	{
 		std::priority_queue<Fitness_index_pair*, vector<Fitness_index_pair*>, Comparator> fitnesses;
@@ -273,95 +277,72 @@ public:
 		calculate_fitnesses(fitnesses);
 		
 		//we keep the first 25 fittest from the last generation
-		int count = 0;
-		int individuals_to_keep = 30;
+
 		vector<int> fittest_individuals_indexes;
+
+		/*int count = 0;
 
 		while (!fitnesses.empty())
 		{
 			Fitness_index_pair* fip = fitnesses.top();
 
 			int individual_index = fitnesses.top()->index;
-			int individual_fitness = fitnesses.top()->fitness;
 
 			fittest_individuals_indexes.push_back(individual_index);
 
-			if (count_breeds % 10000 == 0)
-			{
-				//std::cout << " ind " + std::to_string(individual_index) + " : " + std::to_string(individual_fitness);
-			}
-			
 			store_individual(count, individual_index, next_gen, pop);
 			count++;
 
 			fitnesses.pop();
 			delete fip;
-		}
-
-		if (count_breeds % 10000 == 0)
-		{
-			std::cout << "" << std::endl;
-		}
-
+		}*/
 		
+		calculate_fittest_individuals(fitnesses, fittest_individuals_indexes);
+
 		//we mate the first 3 fittest with the first 25 fittest each.
 		//tottaly the new population has again 100 individuals, 25 old + 75 children
 
-		int children = 25; 
+		int total_children = population_size / 4; 
 		int breeders = 0;
+		int max_children_per_breeder = population_size / 4;
 		
 		for (auto const& parent_a : fittest_individuals_indexes)
 		{
-			if (children == population_size || breeders == 3) {
-				break;
-			}
-
 			int breeder_children = 0;
 
 			for (auto const& parent_b : fittest_individuals_indexes)
 			{
 				if (parent_a != parent_b)
 				{
-					cross_over(parent_a, parent_b, children);
-					children++;
+					cross_over(parent_a, parent_b, total_children);
+					total_children++;
 					breeder_children++;
-				}	
 
-				if (breeder_children == 25) {
-					break;
-				}
+					if (breeder_children == max_children_per_breeder)
+					{
+						break;
+					}
+				}	
 			}
 
 			breeders++;
+
+			if (total_children == population_size || breeders == 3)
+			{
+				break;
+			}
 		}
 	}
 
 	void mutate(int individual) 
 	{
-		if (threshold(0))
-		{
-			for (int i = 0; i < sudoku_size; i++)
-			{
-				swap(i, individual);
-			}
-		}
-		else {
-			std::random_device rd;
-			std::mt19937 eng(rd());
-			std::uniform_int_distribution<> distr(0, sudoku_size - 1);
+		std::random_device rd;
+		std::mt19937 eng(rd());
+		std::uniform_int_distribution<> distr(0, sudoku_size - 1);
 
-			int row = distr(eng);
-			swap(row, individual);
+		int row = distr(eng);
+		swap(row, individual);
 
-			int row2 = distr(eng);
-			while (row2 == row)
-			{
-				row2 = distr(eng);
-			}
-			swap(row2, individual);
-
-		}
-		
 	}
 
 	void swap(int row, int individual)
@@ -374,6 +355,11 @@ public:
 
 		int a = distr(eng);
 		int b = distr(eng);
+
+		while (a == b)
+		{
+			b = distr(eng);
+		}
 
 		int column_a = board.available_boxes[row][a];
 		int column_b = board.available_boxes[row][b];
@@ -394,7 +380,8 @@ public:
 		}
 	}
 
-	int* find_container_starting_box(int row, int column) {
+	int* find_container_starting_box(int row, int column)
+	{
 		int container_size = sqrt(sudoku_size);
 
 		int container_x = row / container_size;
