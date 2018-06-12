@@ -13,14 +13,14 @@ class GeneticSolver
 {
 public:
 	const int sudoku_size = 9;
-	double mutation_rate = 0.3;
+	double mutation_rate = 0.4;
 	const bool elitism = true;
 	Population pop = new Population(true);
 	Population next_gen = new Population(true);
 	Board board = Board();
 	bool solved = false;
 	int population_size = 100;
-	int total_fitness_sum;
+	double total_fitness_sum;
 	int count_breeds = 0;
 	int best_fitness = -100;
 	
@@ -64,7 +64,7 @@ public:
 				}
 				
 				std::cout << " "  << std::endl;
-				std::cout << "avg_fitness " + std::to_string((total_fitness_sum/ population_size)) << std::endl;
+				std::cout << "avg_fitness " + std::to_string((total_fitness_sum/(double)population_size)) << std::endl;
 				std::cout << "" << std::endl;
 			}
 
@@ -74,63 +74,92 @@ public:
 		print(next_gen, 0);
 	}
 
-	int count_fitness(int individual, Population pop)
+	int count_column_errors(int individual, Population& pop)
 	{
-		int fitness = 0;
+		int column_errors = 0;
+
 		for (int column = 0; column < sudoku_size; column++)
 		{
-			for (int box = 0; box < sudoku_size-1; box++)
+			for (int box = 0; box < sudoku_size - 1; box++)
 			{
-				int value_box = pop.population[individual][box][column]->value;
+				int value_box = get_value(individual, pop, box, column);
 
 				for (int other_box = box + 1; other_box < sudoku_size; other_box++)
 				{
-					int value_other = pop.population[individual][other_box][column]->value;
+					int value_other = get_value(individual, pop, other_box, column); 
 
 					if (value_box == value_other)
 					{
-						fitness--;
+						column_errors--;
 					}
 				}
 			}
 		}
-		int container_size = sqrt(sudoku_size);
 
+		return column_errors;
+	}
+
+	int count_container_errors(int individual, Population& pop)
+	{
+		int container_errors = 0;
+		
 		for (int row = 0; row < sudoku_size; row++)
 		{
 			for (int column = 0; column < sudoku_size; column++)
 			{
-				int value_box = pop.population[individual][row][column]->value;
+				container_errors += count_container_value_reapearences(individual, pop, row, column);
+			}
+		}
 
-				int container_x = find_container_starting_box(row, column)[0];
-				int container_y = find_container_starting_box(row, column)[1];
+		return container_errors;
+	}
 
-				int start_row = row;
-				int end_row = container_size + container_x;
+	int count_container_value_reapearences(int individual, Population& pop, int row, int column)
+	{
+		int container_size = sqrt(sudoku_size);
+		int value_reapearences = 0;
+		int value_box = get_value(individual, pop, row, column);
 
-				for (int other_row = start_row; other_row < end_row; other_row++)
+		int container_starting_row = find_container_starting_box(row, column)[0];
+		int container_starting_column = find_container_starting_box(row, column)[1];
+
+		int end_row = container_size + container_starting_row;
+		int end_col = container_size + container_starting_column;
+
+		for (int other_row = row; other_row < end_row; other_row++)
+		{
+			for (int other_column = container_starting_column; other_column < end_col; other_column++)
+			{
+				if ((row == other_row) && (column == other_column)) {
+					continue;
+				}
+				else
 				{
-					int start_col = container_y;
-					int end_col = container_size + container_y;
+					int value_other = get_value(individual, pop, other_row, other_column);
 
-					for (int other_column = start_col; other_column < end_col; other_column++)
+					if (value_box == value_other)
 					{
-						if ((row == other_row) && (column == other_column)) {
-							continue;
-						}
-						else
-						{
-							int value_other = pop.population[individual][other_row][other_column]->value;
-
-							if (value_box == value_other)
-							{
-								fitness--;
-							}
-						}
+						value_reapearences--;
 					}
 				}
 			}
 		}
+
+		return value_reapearences;
+	}
+
+	int get_value(int individual, Population& pop, int row, int column)
+	{
+		return pop.population[individual][row][column]->value;
+	}
+
+	int count_fitness(int individual, Population& pop)
+	{
+		int fitness = 0;
+		
+		fitness += count_column_errors(individual, pop);
+		fitness += count_container_errors(individual, pop);
+		
 		if (fitness == 0) {
 			std::cout << "solution is individual "+std::to_string(individual) << std::endl;
 			solved = true;
@@ -152,41 +181,47 @@ public:
 		double prob = unif(eng);
 		//double percentage_of_first_parent = 0.5;
 
-		int half = sudoku_size / 2;
-		
+		bool top_6_rows_parent_a = false;
+
+		if (prob > 0.4)
+		{
+			top_6_rows_parent_a = true;
+		}
 
 		if (threshold(0))
 		{
 			//percentage_of_first_parent = 1.0;
 		}
-		for (int i = 0; i < sudoku_size; i++)
+		for (int row = 0; row < sudoku_size; row++)
 		{
-			bool parent_a_top_half;
-			if (prob > 0.5)
+			if (top_6_rows_parent_a)
 			{
-				parent_a_top_half = (i > 5);
+				dispatch(row, child, parent_a, parent_b);
 			}
 			else
 			{
-				parent_a_top_half = (i <= 5);
+				dispatch(row, child, parent_b, parent_a);
 			}
+		}
+	}
 
+	void dispatch(int row, int child, int parent_a, int parent_b)
+	{
+		if (row <= 5)
+		{
+			copy_row(row, child, parent_a);
+		}
+		else
+		{
+			copy_row(row, child, parent_b);
+		}
+	}
 
-			if (parent_a_top_half)
-			{
-				for (int j = 0; j < sudoku_size; j++)
-				{
-					next_gen.population[child][i][j]->value = pop.population[parent_b][i][j]->value;
-				}
-			}
-			else
-			{
-				for (int j = 0; j < sudoku_size; j++)
-				{
-					next_gen.population[child][i][j]->value = pop.population[parent_a][i][j]->value;
-				}
-			}
-
+	void copy_row(int row, int child, int parent)
+	{
+		for (int j = 0; j < sudoku_size; j++)
+		{
+			next_gen.population[child][row][j]->value = get_value(parent, pop, row, j);
 		}
 	}
 
@@ -198,26 +233,24 @@ public:
 
 		//we mutate all except the best individual
 		
-		int i = 0;
+		int individual = 0;
 		if (threshold(0))
 		{
-			i = 3;
+			individual = 3;
 		}
-		for (i; i < population_size; i++)
+		for (individual; individual < population_size; individual++)
 		{
 			double prob = unif(eng);
 
 			if (prob < mutation_rate)
 			{
-				mutate(i);
+				mutate(individual);
 			}
 		}
 	}
 
-	void make_new_population()
+	void calculate_fitnesses(std::priority_queue<Fitness_index_pair*, vector<Fitness_index_pair*>, Comparator>& fitnesses)
 	{
-		std::priority_queue<Fitness_index_pair*, vector<Fitness_index_pair*>, Comparator> fitnesses;
-		
 		total_fitness_sum = 0;
 		for (int i = 0; i < population_size; i++)
 		{
@@ -227,8 +260,15 @@ public:
 
 			fitnesses.push(fi);
 		}
+	}
 
-		//we arbitrarily use the first 30 individuals to breed next gen
+	void make_new_population()
+	{
+		std::priority_queue<Fitness_index_pair*, vector<Fitness_index_pair*>, Comparator> fitnesses;
+
+		calculate_fitnesses(fitnesses);
+		
+		//we keep the first 25 fittest from the last generation
 		int count = 0;
 		int individuals_to_keep = 30;
 		vector<int> fittest_individuals_indexes;
@@ -259,8 +299,8 @@ public:
 			std::cout << "" << std::endl;
 		}
 
-		//we keep the first 25 fittest from the last generation
-		//we mate the first 3 fittest with the first 25 fittest each
+		
+		//we mate the first 3 fittest with the first 25 fittest each.
 		//tottaly the new population has again 100 individuals, 25 old + 75 children
 
 		int children = 25; 
@@ -310,14 +350,21 @@ public:
 			swap(row, individual);
 
 			int row2 = distr(eng);
+			while (row2 == row)
+			{
+				row2 = distr(eng);
+			}
 			swap(row2, individual);
+
+	
 		}
 		
 	}
 
-	void swap(int row, int individual) {
+	void swap(int row, int individual)
+	{
 		int number_av_values = board.available_boxes[row].size();
-		//std::cout << "number_av_values " + std::to_string(number_av_values) << std::endl;
+	
 		std::random_device rd;
 		std::mt19937 eng(rd());
 		std::uniform_int_distribution<> distr(0, number_av_values-1);
@@ -325,19 +372,13 @@ public:
 		int a = distr(eng);
 		int b = distr(eng);
 
-		/*std::cout << "row " + std::to_string(row) << std::endl;
-		std::cout << "int a " + std::to_string(a) << std::endl;
-		std::cout << "int b " + std::to_string(b) << std::endl;*/
+		int column_a = board.available_boxes[row][a];
+		int column_b = board.available_boxes[row][b];
 
-		int index_a = board.available_boxes[row][a];
-		int index_b = board.available_boxes[row][b];
-
-		/*std::cout << "index a " + std::to_string(index_a) << std::endl;
-		std::cout << "index b " + std::to_string(index_b) << std::endl;*/
-
-		int temp = next_gen.population[individual][row][index_a]->value;
-		next_gen.population[individual][row][index_a]->value = next_gen.population[individual][row][index_b]->value;
-		next_gen.population[individual][row][index_b]->value = temp;
+		//get_value(individual, next_gen, row, column_a);
+		int temp = next_gen.population[individual][row][column_a]->value;
+		next_gen.population[individual][row][column_a]->value = next_gen.population[individual][row][column_b]->value;
+		next_gen.population[individual][row][column_b]->value = temp;
 	}
 
 	void store_individual(int individual, int index, Population a, Population b)
