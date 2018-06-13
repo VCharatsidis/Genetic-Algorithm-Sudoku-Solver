@@ -3,16 +3,13 @@
   Main.cpp
 c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\fitness_counter.cpp(68): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\fitness_counter.cpp(103): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\geneticsolver.cpp(118): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\geneticsolver.cpp(338): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   GeneticSolver.cpp
 c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\fitness_counter.cpp(68): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\fitness_counter.cpp(103): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\geneticsolver.cpp(118): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\geneticsolver.cpp(338): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   Fitness_counter.cpp
 c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\fitness_counter.cpp(68): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\fitness_counter.cpp(103): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  CrossOver.cpp
   Comparator.cpp
   Box.cpp
   Board.cpp
