@@ -6,6 +6,7 @@
 #include <random>
 #include <queue>
 #include "Comparator.cpp"
+#include "Mutator.cpp"
 
 using std::vector;
 
@@ -13,10 +14,11 @@ class GeneticSolver
 {
 public:
 	const int sudoku_size = 9;
-	double mutation_rate = 0.5;
+	double mutation_rate = 0.3;
 	const bool elitism = true;
 	Population pop = new Population(true);
 	Population next_gen = new Population(true);
+	Mutator* mutator = new Mutator(pop, next_gen, mutation_rate);
 	bool solved = false;
 	Board board = Board();
 	int population_size = 100;
@@ -30,14 +32,15 @@ public:
 		{
 			make_new_population();
 
-			make_mutations();
+			mutator->make_mutations();
+			//make_mutations();
 
 			for (int i = 0; i < population_size; i++)
 			{
 				store_individual(i, i, pop, next_gen);
 			}	
 
-			if (generations % 10000 == 0) 
+			if (generations % 5000 == 0) 
 			{
 				print(pop, 0);
 
@@ -177,7 +180,7 @@ public:
 
 		bool top_6_rows_parent_a = false;
 
-		if (prob > 0.3)
+		if (prob > 0.4)
 		{
 			top_6_rows_parent_a = true;
 		}
@@ -279,23 +282,6 @@ public:
 		//we keep the first 25 fittest from the last generation
 
 		vector<int> fittest_individuals_indexes;
-
-		/*int count = 0;
-
-		while (!fitnesses.empty())
-		{
-			Fitness_index_pair* fip = fitnesses.top();
-
-			int individual_index = fitnesses.top()->index;
-
-			fittest_individuals_indexes.push_back(individual_index);
-
-			store_individual(count, individual_index, next_gen, pop);
-			count++;
-
-			fitnesses.pop();
-			delete fip;
-		}*/
 		
 		calculate_fittest_individuals(fitnesses, fittest_individuals_indexes);
 
@@ -342,7 +328,6 @@ public:
 
 		int row = distr(eng);
 		swap(row, individual);
-
 	}
 
 	void swap(int row, int individual)

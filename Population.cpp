@@ -1,3 +1,6 @@
+#ifndef POPULATION_H
+#define POPULATION_H
+
 #include "Board.cpp"
 
 class Population 
@@ -30,3 +33,5 @@ public:
 	}
 
 };
+
+#endif

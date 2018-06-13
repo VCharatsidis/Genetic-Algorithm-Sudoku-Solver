@@ -116,6 +116,7 @@
     <ClCompile Include="Comparator.cpp" />
     <ClCompile Include="GeneticSolver.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Mutator.cpp" />
     <ClCompile Include="Population.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
