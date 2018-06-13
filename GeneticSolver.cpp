@@ -7,6 +7,7 @@
 #include <queue>
 #include "Comparator.cpp"
 #include "Mutator.cpp"
+#include "Fitness_counter.cpp"
 
 using std::vector;
 
@@ -14,11 +15,12 @@ class GeneticSolver
 {
 public:
 	const int sudoku_size = 9;
-	double mutation_rate = 0.3;
+	double mutation_rate = 0.15;
 	const bool elitism = true;
 	Population pop = new Population(true);
 	Population next_gen = new Population(true);
 	Mutator* mutator = new Mutator(pop, next_gen, mutation_rate);
+	FitnessCounter fitness_counter;
 	bool solved = false;
 	Board board = Board();
 	int population_size = 100;
@@ -33,7 +35,6 @@ public:
 			make_new_population();
 
 			mutator->make_mutations();
-			//make_mutations();
 
 			for (int i = 0; i < population_size; i++)
 			{
@@ -44,14 +45,20 @@ public:
 			{
 				print(pop, 0);
 
-				std::cout << "fitness " + std::to_string(count_fitness(0, pop)) << std::endl;
+				//std::cout << "fitness " + std::to_string(count_fitness(0, pop)) << std::endl;
+				std::cout << "fitness " + std::to_string(fitness_counter.count_fitness(0, pop)) << std::endl;
 				std::cout << "best_fitness " + std::to_string(best_fitness) << std::endl;
 				std::cout << "generation " + std::to_string(generations) << std::endl;
+
 				total_fitness_sum = 0;
 
 				for (int i = 0; i < population_size; i++)
 				{
-					std::cout << " ind "+std::to_string(i)+" : " + std::to_string(count_fitness(i, next_gen));
+					int fitness = fitness_counter.count_fitness(i, next_gen);
+					//int fitness = count_fitness(i, next_gen);
+					std::cout << " ind "+std::to_string(i)+" : " + std::to_string(fitness);
+
+					total_fitness_sum += fitness;
 				}
 				
 				std::cout << " "  << std::endl;
@@ -164,8 +171,6 @@ public:
 			best_fitness = fitness;
 		}
 
-		total_fitness_sum += fitness;
-
 		return fitness;
 	}
 
@@ -218,33 +223,30 @@ public:
 		}
 	}
 
-	void make_mutations()
-	{
-		std::random_device rd;
-		std::mt19937 eng(rd());
-		std::uniform_real_distribution<double> unif(0, 1);
-
-		//we mutate all except the best individual
-
-		for (int individual = 0; individual < population_size; individual++)
-		{
-			double prob = unif(eng);
-
-			if (prob < mutation_rate)
-			{
-				mutate(individual);
-			}
-		}
-	}
-
 	void calculate_fitnesses(std::priority_queue<Fitness_index_pair*, vector<Fitness_index_pair*>, Comparator>& fitnesses)
 	{
-		total_fitness_sum = 0;
-
 		for (int i = 0; i < population_size; i++)
 		{
 			Fitness_index_pair* fi = new Fitness_index_pair();
-			fi->fitness = count_fitness(i, pop);
+			//fi->fitness = count_fitness(i, pop);
+
+			int fitness = fitness_counter.count_fitness(i, pop);
+
+			fi->fitness = fitness;
+
+			if (fitness == 0)
+			{
+				std::cout << "solution is individual " + std::to_string(i) << std::endl;
+				solved = true;
+			}
+
+			if (fitness > best_fitness)
+			{
+				best_fitness = fitness;
+			}
+
+			
+
 			fi->index = i;
 
 			fitnesses.push(fi);
@@ -318,40 +320,6 @@ public:
 				break;
 			}
 		}
-	}
-
-	void mutate(int individual) 
-	{
-		std::random_device rd;
-		std::mt19937 eng(rd());
-		std::uniform_int_distribution<> distr(0, sudoku_size - 1);
-
-		int row = distr(eng);
-		swap(row, individual);
-	}
-
-	void swap(int row, int individual)
-	{
-		int number_av_values = board.available_boxes[row].size();
-	
-		std::random_device rd;
-		std::mt19937 eng(rd());
-		std::uniform_int_distribution<> distr(0, number_av_values-1);
-
-		int a = distr(eng);
-		int b = distr(eng);
-
-		while (a == b)
-		{
-			b = distr(eng);
-		}
-
-		int column_a = board.available_boxes[row][a];
-		int column_b = board.available_boxes[row][b];
-
-		int temp = get_value(individual, next_gen, row, column_a);
-		next_gen.population[individual][row][column_a]->value = get_value(individual, next_gen, row, column_b);
-		next_gen.population[individual][row][column_b]->value = temp;
 	}
 
 	void store_individual(int individual, int index, Population a, Population b)

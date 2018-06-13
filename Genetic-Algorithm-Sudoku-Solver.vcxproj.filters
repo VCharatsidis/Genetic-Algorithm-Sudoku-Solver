@@ -36,5 +36,8 @@
     <ClCompile Include="Mutator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Fitness_counter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
