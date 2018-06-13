@@ -9,8 +9,8 @@ class Population
 public:
 	
 	int size = 9;
-	const int pop_size = 100;
-	Box* population [100][9][9];
+	const int pop_size = 500;
+	Box* population [500][9][9];
 
 	Population(bool initialize)
 	{

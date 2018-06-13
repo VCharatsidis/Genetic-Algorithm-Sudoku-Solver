@@ -16,7 +16,7 @@ class GeneticSolver
 {
 public:
 	const int sudoku_size = 9;
-	double mutation_rate = 0.65;
+	double mutation_rate = 0.5;
 	const bool elitism = true;
 	Population pop = new Population(true);
 	Population next_gen = new Population(true);
@@ -26,7 +26,7 @@ public:
 	FitnessCounter fitness_counter;
 	bool solved = false;
 	Board board = Board();
-	int population_size = 100;
+	int population_size = 500;
 	double total_fitness_sum;
 	int generations = 0;
 	int best_fitness = -100;
@@ -44,7 +44,7 @@ public:
 				store_individual(i, i, pop, next_gen);
 			}	
 
-			if (generations % 5000 == 0) 
+			if (generations % 1000 == 0) 
 			{
 				print(pop, 0);
 
@@ -95,9 +95,10 @@ public:
 	//tottaly the new population has again 100 individuals, 25 old + 75 children
 	void breed(vector<int> fittest_individuals_indexes)
 	{
-		int total_children = population_size / 4;
+		int total_children = 0;
 		int breeders = 0;
-		int max_children_per_breeder = population_size / 4;
+		int max_children_per_breeder = (population_size / 5)-1;
+		int total_breeders = 5;
 
 		for (auto const& parent_a : fittest_individuals_indexes)
 		{
@@ -120,7 +121,7 @@ public:
 
 			breeders++;
 
-			if (total_children == population_size || breeders == 3)
+			if (total_children == population_size || breeders == total_breeders)
 			{
 				break;
 			}
