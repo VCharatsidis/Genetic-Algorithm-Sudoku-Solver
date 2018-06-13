@@ -16,7 +16,7 @@ class GeneticSolver
 {
 public:
 	const int sudoku_size = 9;
-	double mutation_rate = 0.15;
+	double mutation_rate = 0.65;
 	const bool elitism = true;
 	Population pop = new Population(true);
 	Population next_gen = new Population(true);
@@ -75,6 +75,58 @@ public:
 		print(next_gen, 0);
 	}
 
+	void make_new_population()
+	{
+		std::priority_queue<Fitness_index_pair*, vector<Fitness_index_pair*>, Comparator> fitnesses;
+
+		calculate_fitnesses(fitnesses);
+
+		//we keep the first 25 fittest from the last generation
+
+		vector<int> fittest_individuals_indexes;
+
+		store_fittest_individuals(fitnesses, fittest_individuals_indexes);
+
+		breed(fittest_individuals_indexes);
+
+	}
+
+	//we mate the first 3 fittest with the first 25 fittest each.
+	//tottaly the new population has again 100 individuals, 25 old + 75 children
+	void breed(vector<int> fittest_individuals_indexes)
+	{
+		int total_children = population_size / 4;
+		int breeders = 0;
+		int max_children_per_breeder = population_size / 4;
+
+		for (auto const& parent_a : fittest_individuals_indexes)
+		{
+			int breeder_children = 0;
+
+			for (auto const& parent_b : fittest_individuals_indexes)
+			{
+				if (parent_a != parent_b)
+				{
+					crossOver->cross_over(parent_a, parent_b, total_children);
+					total_children++;
+					breeder_children++;
+
+					if (breeder_children == max_children_per_breeder)
+					{
+						break;
+					}
+				}
+			}
+
+			breeders++;
+
+			if (total_children == population_size || breeders == 3)
+			{
+				break;
+			}
+		}
+	}
+
 	void calculate_fitnesses(std::priority_queue<Fitness_index_pair*, vector<Fitness_index_pair*>, Comparator>& fitnesses)
 	{
 		for (int i = 0; i < population_size; i++)
@@ -122,53 +174,6 @@ public:
 
 			fitnesses.pop();
 			delete fip;
-		}
-	}
-
-	void make_new_population()
-	{
-		std::priority_queue<Fitness_index_pair*, vector<Fitness_index_pair*>, Comparator> fitnesses;
-
-		calculate_fitnesses(fitnesses);
-		
-		//we keep the first 25 fittest from the last generation
-
-		vector<int> fittest_individuals_indexes;
-		
-		store_fittest_individuals(fitnesses, fittest_individuals_indexes);
-
-		//we mate the first 3 fittest with the first 25 fittest each.
-		//tottaly the new population has again 100 individuals, 25 old + 75 children
-
-		int total_children = population_size / 4; 
-		int breeders = 0;
-		int max_children_per_breeder = population_size / 4;
-		
-		for (auto const& parent_a : fittest_individuals_indexes)
-		{
-			int breeder_children = 0;
-
-			for (auto const& parent_b : fittest_individuals_indexes)
-			{
-				if (parent_a != parent_b)
-				{
-					crossOver->cross_over(parent_a, parent_b, total_children);
-					total_children++;
-					breeder_children++;
-
-					if (breeder_children == max_children_per_breeder)
-					{
-						break;
-					}
-				}	
-			}
-
-			breeders++;
-
-			if (total_children == population_size || breeders == 3)
-			{
-				break;
-			}
 		}
 	}
 
