@@ -10,6 +10,7 @@
 #include "Fitness_counter.cpp"
 #include "CrossOver.cpp"
 #include "PatriarchMatingStrategy.cpp"
+#include "AlmostRandom.cpp"
 
 using std::vector;
 
@@ -26,7 +27,9 @@ public:
 	Population next_gen = new Population(true);
 	Mutator* mutator = new Mutator(pop, next_gen, mutation_rate);
 	CrossOver* crossOver = new CrossOver(pop, next_gen);
-	Patriarch* breeder = new Patriarch(crossOver, total_breeders, pop.pop_size);
+	//Patriarch* breeder = new Patriarch(crossOver, total_breeders, pop.pop_size);
+	AlmostRandom* random_breeder = new AlmostRandom(crossOver, 200, pop.pop_size);
+
 	FitnessCounter fitness_counter;
 
 	bool solved = false;
@@ -69,8 +72,8 @@ public:
 
 		store_fittest_individuals(fitnesses, fittest_individuals_indexes);
 
-		breeder->breed(fittest_individuals_indexes);
-
+		//breeder->breed(fittest_individuals_indexes);
+		random_breeder->breed(fittest_individuals_indexes);
 	}
 
 	void calculate_fitnesses(std::priority_queue<Fitness_index_pair*, vector<Fitness_index_pair*>, Comparator>& fitnesses)

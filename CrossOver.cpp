@@ -35,7 +35,7 @@ public:
 
 		bool top_6_rows_parent_a = false;
 
-		if (prob > 0.45)
+		if (prob > 0.5)
 		{
 			top_6_rows_parent_a = true;
 		}

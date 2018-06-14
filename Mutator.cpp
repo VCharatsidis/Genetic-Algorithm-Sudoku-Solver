@@ -61,77 +61,71 @@ public:
 		std::uniform_real_distribution<double> unif(0, 1);
 
 		int a = distr(eng);
-		int column_a = board.available_boxes[row][a];
-		
 		int b = distr(eng);
+		int column_a = board.available_boxes[row][a];
+		int column_b = board.available_boxes[row][b];
+
 		double prob = unif(eng);
 
 		if (prob > 0.7)
 		{
 			double next = unif(eng);
-			//if possible we mutate neighbours so as to not ruin the balance of container boxes.
-			b = mutate_neighbours(a, row, b, next);
-		}
-		else
-		{
-			while (a == b)
-			{
-				b = distr(eng);
-			}
+			
+			column_b = mutate_neighbours(row, column_a, column_b, next);
 		}
 
-		int column_b = board.available_boxes[row][b];
+		//std::cout << "b " + std::to_string(b) << std::endl;
 		
 		int temp = get_value(individual, next_gen, row, column_a);
 		next_gen.population[individual][row][column_a]->value = get_value(individual, next_gen, row, column_b);
 		next_gen.population[individual][row][column_b]->value = temp;
 	}
 
-	int mutate_neighbours(int a, int row, int b, double next)
+	//if possible we mutate neighbours so as to not ruin the balance of container boxes.
+	int mutate_neighbours(int row, int column_a, int  column_b, double next)
 	{
-		int column_a = board.available_boxes[row][a];
-
 		if (column_a == 1 || column_a == 4 || column_a == 7)
 		{
-			if (next > 0.5)
-			{
-				if (!board.boxes[row][column_a + 1]->fixed)
-				{
-					b = a + 1;
-				}
-				else if (!board.boxes[row][column_a - 1]->fixed)
-				{
-					b = a - 1;
-				}
-			}
-			else
-			{
-				if (!board.boxes[row][column_a - 1]->fixed)
-				{
-					b = a - 1;
-				}
-				else if (!board.boxes[row][column_a + 1]->fixed)
-				{
-					b = a + 1;
-				}
-			}
+			column_b = dispatch(row, column_a, column_b, 1, -1, next);
 		}
 		else if (column_a == 2 || column_a == 5 || column_a == 8)
 		{
-			if (!board.boxes[row][column_a - 1]->fixed)
-			{
-				b = a - 1;
-			}
+			column_b = dispatch(row, column_a, column_b, -1, -2, next);
 		}
 		else if (column_a == 0 || column_a == 3 || column_a == 6)
 		{
-			if (!board.boxes[row][column_a + 1]->fixed)
-			{
-				b = a + 1;
-			}
+			column_b = dispatch(row, column_a, column_b, 1, 2, next);
 		}
 
-		return b;
+		return column_b;
+	}
+
+	int dispatch(int row, int column_a, int column_b, int neighbour_1, int neighbour_2, double next)
+	{
+		if (next > 0.5)
+		{
+			column_b = check_fixed_and_assign(row, column_a, column_b, neighbour_1, neighbour_2);
+		}
+		else
+		{
+			column_b = check_fixed_and_assign(row, column_a, column_b, neighbour_2, neighbour_1);
+		}
+
+		return column_b;
+	}
+
+	int check_fixed_and_assign(int row, int column_a, int column_b, int neighbour_1, int neighbour_2)
+	{
+		if (!board.boxes[row][column_a + neighbour_1]->fixed)
+		{
+			column_b = column_a + neighbour_1;
+		}
+		else if (!board.boxes[row][column_a + neighbour_2]->fixed)
+		{
+			column_b = column_a + neighbour_2;
+		}
+		//std::cout << "b = " + std::to_string(b) + " neigh_1 = " +std::to_string(neighbour_1)+" neigh_2 = "+std::to_string(neighbour_2) +" a = "+std::to_string(a) +" row = "+std::to_string(row)+" column_a = "+std::to_string(column_a) << std::endl;
+		return column_b;
 	}
 
 	int get_value(int individual, Population& pop, int row, int column)

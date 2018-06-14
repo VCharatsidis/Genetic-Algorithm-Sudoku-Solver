@@ -1,3 +1,6 @@
+#ifndef MATESTRATEGY_H
+#define MATESTRATEGY_H
+
 #include <vector>
 #include "CrossOver.cpp"
 
@@ -10,3 +13,5 @@ public:
 	virtual void breed(vector<int> fittest_individuals_indexes) = 0;
 
 };
+
+#endif
