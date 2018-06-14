@@ -8,7 +8,7 @@ class Population
 	
 public:
 	
-	int size = 9;
+	int sudoku_size = 9;
 	const int pop_size = 500;
 	Box* population [500][9][9];
 
@@ -21,9 +21,9 @@ public:
 				Board board = Board();
 				board.generate_board();
 
-				for (int z = 0; z < size; z++)
+				for (int z = 0; z < sudoku_size; z++)
 				{
-					for (int j = 0; j < size; j++)
+					for (int j = 0; j < sudoku_size; j++)
 					{
 						population[i][z][j] = board.boxes[z][j];
 					}

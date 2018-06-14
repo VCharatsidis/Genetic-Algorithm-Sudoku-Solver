@@ -8,7 +8,7 @@ public:
 
 	int count_fitness(int individual, Population& pop)
 	{
-		sudoku_size = pop.size;
+		sudoku_size = pop.sudoku_size;
 		int fitness = 0;
 
 		fitness += count_column_errors(individual, pop);

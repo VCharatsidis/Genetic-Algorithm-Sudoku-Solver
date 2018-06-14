@@ -42,5 +42,11 @@
     <ClCompile Include="CrossOver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PatriarchMatingStrategy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MateStrategy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

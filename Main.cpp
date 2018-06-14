@@ -40,9 +40,9 @@ void print(Board b)
 void print(Population b, int individual)
 {
 	cout << "Individual "+std::to_string(individual) << endl;
-	for (int i = 0; i < b.size; i++)
+	for (int i = 0; i < b.sudoku_size; i++)
 	{
-		for (int j = 0; j < b.size; j++)
+		for (int j = 0; j < b.sudoku_size; j++)
 		{
 			int val = b.population[individual][i][j]->value;
 

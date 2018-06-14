@@ -1,3 +1,7 @@
+
+#ifndef CROSSOVER_H
+#define CROSSOVER_H
+
 #include "Population.cpp"
 #include <iostream>
 #include <algorithm>
@@ -14,47 +18,47 @@ public:
 	Population& pop;
 	Population& next_gen;
 	int sudoku_size;
+	std::uniform_real_distribution<double> unif;
 
 	CrossOver(Population& pop, Population& next_gen) : pop(pop), next_gen(next_gen)
 	{
-		sudoku_size = pop.size;
+		sudoku_size = pop.sudoku_size;
+		std::uniform_real_distribution<double> unif(0, 1);
 	}
 
 	void cross_over(int parent_a, int parent_b, int child)
 	{
 		std::random_device rd;
 		std::mt19937 eng(rd());
-		std::uniform_real_distribution<double> unif(0, 1);
-
+	
 		double prob = unif(eng);
 
 		bool top_6_rows_parent_a = false;
 
-		if (prob > 0.4)
+		if (prob > 0.45)
 		{
 			top_6_rows_parent_a = true;
 		}
 
-		for (int row = 0; row < sudoku_size; row++)
+		if (top_6_rows_parent_a)
 		{
-			if (top_6_rows_parent_a)
-			{
-				dispatch(row, child, parent_a, parent_b);
-			}
-			else
-			{
-				dispatch(row, child, parent_b, parent_a);
-			}
+			copy_board(child, parent_a, parent_b);
 		}
+		else
+		{
+			copy_board(child, parent_b, parent_a);
+		}
+
 	}
 
-	void dispatch(int row, int child, int parent_a, int parent_b)
+	void copy_board(int child, int parent_a, int parent_b)
 	{
-		if (row <= 5)
+		for (int row = 0; row < 6; row++)
 		{
 			copy_row(row, child, parent_a);
 		}
-		else
+
+		for (int row = 6; row < sudoku_size; row++)
 		{
 			copy_row(row, child, parent_b);
 		}
@@ -73,3 +77,4 @@ public:
 		return pop.population[individual][row][column]->value;
 	}
 };
+#endif

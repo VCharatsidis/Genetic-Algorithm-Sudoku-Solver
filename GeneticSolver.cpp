@@ -9,6 +9,7 @@
 #include "Mutator.cpp"
 #include "Fitness_counter.cpp"
 #include "CrossOver.cpp"
+#include "PatriarchMatingStrategy.cpp"
 
 using std::vector;
 
@@ -16,18 +17,19 @@ class GeneticSolver
 {
 public:
 	const int sudoku_size = 9;
-	double mutation_rate = 0.5;
-	const bool elitism = true;
+
+	double mutation_rate = 0.3;
+	int total_breeders = 100;
+	int population_size = 500;
+
 	Population pop = new Population(true);
 	Population next_gen = new Population(true);
 	Mutator* mutator = new Mutator(pop, next_gen, mutation_rate);
 	CrossOver* crossOver = new CrossOver(pop, next_gen);
-
+	Patriarch* breeder = new Patriarch(crossOver, total_breeders, pop.pop_size);
 	FitnessCounter fitness_counter;
+
 	bool solved = false;
-	Board board = Board();
-	int population_size = 500;
-	double total_fitness_sum;
 	int generations = 0;
 	int best_fitness = -100;
 	
@@ -44,35 +46,15 @@ public:
 				store_individual(i, i, pop, next_gen);
 			}	
 
-			if (generations % 1000 == 0) 
+			if (generations % 200 == 0) 
 			{
-				print(pop, 0);
-
-				//std::cout << "fitness " + std::to_string(count_fitness(0, pop)) << std::endl;
-				std::cout << "fitness " + std::to_string(fitness_counter.count_fitness(0, pop)) << std::endl;
-				std::cout << "best_fitness " + std::to_string(best_fitness) << std::endl;
-				std::cout << "generation " + std::to_string(generations) << std::endl;
-
-				total_fitness_sum = 0;
-
-				for (int i = 0; i < population_size; i++)
-				{
-					int fitness = fitness_counter.count_fitness(i, next_gen);
-					//int fitness = count_fitness(i, next_gen);
-					std::cout << " ind "+std::to_string(i)+" : " + std::to_string(fitness);
-
-					total_fitness_sum += fitness;
-				}
-				
-				std::cout << " "  << std::endl;
-				std::cout << "avg_fitness " + std::to_string((total_fitness_sum/(double)population_size)) << std::endl;
-				std::cout << "" << std::endl;
+				print_info();
 			}
 
 			generations++;
 		}
 
-		print(next_gen, 0);
+		print_board(next_gen, 0);
 	}
 
 	void make_new_population()
@@ -87,45 +69,8 @@ public:
 
 		store_fittest_individuals(fitnesses, fittest_individuals_indexes);
 
-		breed(fittest_individuals_indexes);
+		breeder->breed(fittest_individuals_indexes);
 
-	}
-
-	//we mate the first 3 fittest with the first 25 fittest each.
-	//tottaly the new population has again 100 individuals, 25 old + 75 children
-	void breed(vector<int> fittest_individuals_indexes)
-	{
-		int total_children = 0;
-		int breeders = 0;
-		int max_children_per_breeder = (population_size / 5)-1;
-		int total_breeders = 5;
-
-		for (auto const& parent_a : fittest_individuals_indexes)
-		{
-			int breeder_children = 0;
-
-			for (auto const& parent_b : fittest_individuals_indexes)
-			{
-				if (parent_a != parent_b)
-				{
-					crossOver->cross_over(parent_a, parent_b, total_children);
-					total_children++;
-					breeder_children++;
-
-					if (breeder_children == max_children_per_breeder)
-					{
-						break;
-					}
-				}
-			}
-
-			breeders++;
-
-			if (total_children == population_size || breeders == total_breeders)
-			{
-				break;
-			}
-		}
 	}
 
 	void calculate_fitnesses(std::priority_queue<Fitness_index_pair*, vector<Fitness_index_pair*>, Comparator>& fitnesses)
@@ -194,12 +139,35 @@ public:
 		return pop.population[individual][row][column]->value;
 	}
 
-	void print(Population b, int individual)
+	void print_info()
+	{
+		print_board(pop, 0);
+
+		std::cout << "fitness " + std::to_string(fitness_counter.count_fitness(0, pop)) << std::endl;
+		std::cout << "best_fitness " + std::to_string(best_fitness) << std::endl;
+		std::cout << "generation " + std::to_string(generations) << std::endl;
+
+		double total_fitness_sum = 0;
+
+		for (int i = 0; i < population_size; i++)
+		{
+			int fitness = fitness_counter.count_fitness(i, next_gen);
+			std::cout << " ind " + std::to_string(i) + " : " + std::to_string(fitness);
+
+			total_fitness_sum += fitness;
+		}
+
+		std::cout << " " << std::endl;
+		std::cout << "avg_fitness " + std::to_string((total_fitness_sum / (double)population_size)) << std::endl;
+		std::cout << "" << std::endl;
+	}
+
+	void print_board(Population b, int individual)
 	{
 		std::cout << "Individual " + std::to_string(individual) << std::endl;
-		for (int i = 0; i < b.size; i++)
+		for (int i = 0; i < b.sudoku_size; i++)
 		{
-			for (int j = 0; j < b.size; j++)
+			for (int j = 0; j < b.sudoku_size; j++)
 			{
 				int val = b.population[individual][i][j]->value;
 

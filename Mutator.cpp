@@ -32,11 +32,6 @@ public:
 
 		for (int individual = 0; individual < population_size; individual++)
 		{
-			if (individual == 5)
-			{
-				continue;
-			}
-
 			double prob = unif(eng);
 			
 			if (prob < mutation_rate)
@@ -71,49 +66,11 @@ public:
 		int b = distr(eng);
 		double prob = unif(eng);
 
-		if (prob > 0.2)
+		if (prob > 0.7)
 		{
 			double next = unif(eng);
-
-			if (column_a == 1 || column_a == 4 || column_a == 7)
-			{
-				if (next > 0.5)
-				{
-					if (!board.boxes[row][column_a + 1]->fixed)
-					{
-						b = a + 1;
-					}
-					else if (!board.boxes[row][column_a - 1]->fixed)
-					{
-						b = a - 1;
-					}
-				}
-				else
-				{
-					if (!board.boxes[row][column_a - 1]->fixed)
-					{
-						b = a - 1;
-					}
-					else if (!board.boxes[row][column_a + 1]->fixed)
-					{
-						b = a + 1;
-					}
-				}
-			}
-			else if (column_a == 2 || column_a == 5 || column_a == 8)
-			{
-				if (!board.boxes[row][column_a - 1]->fixed)
-				{
-					b = a - 1;
-				}
-			}
-			else if (column_a == 0 || column_a == 3 || column_a == 6)
-			{
-				if (!board.boxes[row][column_a + 1]->fixed)
-				{
-					b = a + 1;
-				}
-			}
+			//if possible we mutate neighbours so as to not ruin the balance of container boxes.
+			b = mutate_neighbours(a, row, b, next);
 		}
 		else
 		{
@@ -122,13 +79,59 @@ public:
 				b = distr(eng);
 			}
 		}
-	
-		//std::cout << "column_a " +  std::to_string(column_a) << std::endl;
+
 		int column_b = board.available_boxes[row][b];
 		
 		int temp = get_value(individual, next_gen, row, column_a);
 		next_gen.population[individual][row][column_a]->value = get_value(individual, next_gen, row, column_b);
 		next_gen.population[individual][row][column_b]->value = temp;
+	}
+
+	int mutate_neighbours(int a, int row, int b, double next)
+	{
+		int column_a = board.available_boxes[row][a];
+
+		if (column_a == 1 || column_a == 4 || column_a == 7)
+		{
+			if (next > 0.5)
+			{
+				if (!board.boxes[row][column_a + 1]->fixed)
+				{
+					b = a + 1;
+				}
+				else if (!board.boxes[row][column_a - 1]->fixed)
+				{
+					b = a - 1;
+				}
+			}
+			else
+			{
+				if (!board.boxes[row][column_a - 1]->fixed)
+				{
+					b = a - 1;
+				}
+				else if (!board.boxes[row][column_a + 1]->fixed)
+				{
+					b = a + 1;
+				}
+			}
+		}
+		else if (column_a == 2 || column_a == 5 || column_a == 8)
+		{
+			if (!board.boxes[row][column_a - 1]->fixed)
+			{
+				b = a - 1;
+			}
+		}
+		else if (column_a == 0 || column_a == 3 || column_a == 6)
+		{
+			if (!board.boxes[row][column_a + 1]->fixed)
+			{
+				b = a + 1;
+			}
+		}
+
+		return b;
 	}
 
 	int get_value(int individual, Population& pop, int row, int column)
