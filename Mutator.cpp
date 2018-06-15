@@ -28,9 +28,9 @@ public:
 		std::mt19937 eng(rd());
 		std::uniform_real_distribution<double> unif(0, 1);
 
-		//we mutate all except the best individual
+		//we mutate all except the best individuals
 
-		for (int individual = 0; individual < population_size; individual++)
+		for (int individual = 10; individual < population_size; individual++)
 		{
 			double prob = unif(eng);
 			
@@ -49,10 +49,12 @@ public:
 		std::uniform_int_distribution<> distr(0, sudoku_size - 1);
 
 		int row = distr(eng);
-		swap(row, individual);
+		int* boxes = choose_boxes_to_swap(row, individual);
+	
+		swap(boxes[0], boxes[1], row, individual);
 	}
 
-	void swap(int row, int individual)
+	int* choose_boxes_to_swap(int row, int individual)
 	{
 		int number_av_values = board.available_boxes[row].size();
 
@@ -69,16 +71,14 @@ public:
 
 		if (prob > 0.7)
 		{
-			double next = unif(eng);
-			
-			column_b = mutate_neighbours(row, column_a, column_b, next);
+		double next = unif(eng);
+
+		column_b = mutate_neighbours(row, column_a, column_b, next);
 		}
 
-		//std::cout << "b " + std::to_string(b) << std::endl;
-		
-		int temp = get_value(individual, next_gen, row, column_a);
-		next_gen.population[individual][row][column_a]->value = get_value(individual, next_gen, row, column_b);
-		next_gen.population[individual][row][column_b]->value = temp;
+		int boxes[] = { column_a, column_b };
+
+		return boxes;
 	}
 
 	//if possible we mutate neighbours so as to not ruin the balance of container boxes.
@@ -126,6 +126,13 @@ public:
 		}
 		//std::cout << "b = " + std::to_string(b) + " neigh_1 = " +std::to_string(neighbour_1)+" neigh_2 = "+std::to_string(neighbour_2) +" a = "+std::to_string(a) +" row = "+std::to_string(row)+" column_a = "+std::to_string(column_a) << std::endl;
 		return column_b;
+	}
+
+	void swap(int box_a, int box_b, int row, int individual)
+	{
+		int temp = get_value(individual, next_gen, row, box_a);
+		next_gen.population[individual][row][box_a]->value = get_value(individual, next_gen, row, box_b);
+		next_gen.population[individual][row][box_b]->value = temp;
 	}
 
 	int get_value(int individual, Population& pop, int row, int column)

@@ -123,6 +123,7 @@
     <ClCompile Include="PatriarchMatingStrategy.cpp" />
     <ClCompile Include="Population.cpp" />
     <ClCompile Include="AlmostRandom.cpp" />
+    <ClCompile Include="RouletteWheel.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

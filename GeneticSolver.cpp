@@ -11,6 +11,7 @@
 #include "CrossOver.cpp"
 #include "PatriarchMatingStrategy.cpp"
 #include "AlmostRandom.cpp"
+#include "RouletteWheel.cpp";
 
 using std::vector;
 
@@ -19,22 +20,26 @@ class GeneticSolver
 public:
 	const int sudoku_size = 9;
 
+	// hyperparameters
 	double mutation_rate = 0.3;
 	int total_breeders = 100;
 	int population_size = 500;
+	bool elitism = true;
 
 	Population pop = new Population(true);
 	Population next_gen = new Population(true);
 	Mutator* mutator = new Mutator(pop, next_gen, mutation_rate);
 	CrossOver* crossOver = new CrossOver(pop, next_gen);
+
 	//Patriarch* breeder = new Patriarch(crossOver, total_breeders, pop.pop_size);
-	AlmostRandom* random_breeder = new AlmostRandom(crossOver, 200, pop.pop_size);
+	AlmostRandom* random_breeder = new AlmostRandom(crossOver, 200, pop.pop_size, elitism);
 
 	FitnessCounter fitness_counter;
 
 	bool solved = false;
 	int generations = 0;
 	int best_fitness = -100;
+	double total_fitness;
 	
 	void solve() 
 	{
@@ -69,24 +74,32 @@ public:
 		//we keep the first 25 fittest from the last generation
 
 		vector<int> fittest_individuals_indexes;
+		vector<int> fittest_individuals_ftinesses;
 
-		store_fittest_individuals(fitnesses, fittest_individuals_indexes);
+		store_fittest_individuals(fitnesses, fittest_individuals_indexes, fittest_individuals_ftinesses);
 
+		//RouletteWheel roulette = RouletteWheel(crossOver, population_size, total_fitness, fittest_individuals_ftinesses);
+		//roulette.breed(fittest_individuals_indexes);
 		//breeder->breed(fittest_individuals_indexes);
 		random_breeder->breed(fittest_individuals_indexes);
 	}
 
 	void calculate_fitnesses(std::priority_queue<Fitness_index_pair*, vector<Fitness_index_pair*>, Comparator>& fitnesses)
 	{
-		for (int i = 0; i < population_size; i++)
+		// We start from the end because when we compare a -2 fitness with -2 the first will stay,
+		// so if we use elitism and chose to not mutate the top x individuals
+		// they will never change.
+		total_fitness = 0;
+		for (int i = (population_size-1); i >= 0; i--)
 		{
 			Fitness_index_pair* fi = new Fitness_index_pair();
-			//fi->fitness = count_fitness(i, pop);
 
 			int fitness = fitness_counter.count_fitness(i, pop);
+			total_fitness += fitness;
 
 			fi->fitness = fitness;
-
+			fi->index = i;
+			
 			if (fitness == 0)
 			{
 				std::cout << "solution is individual " + std::to_string(i) << std::endl;
@@ -98,14 +111,12 @@ public:
 				best_fitness = fitness;
 			}
 
-			fi->index = i;
-
 			fitnesses.push(fi);
 		}
 	}
 
 	void store_fittest_individuals(std::priority_queue<Fitness_index_pair*, vector<Fitness_index_pair*>, Comparator>& fitnesses, 
-		vector<int>& fittest_individuals_indexes)
+		vector<int>& fittest_individuals_indexes, vector<int>& fittest_individuals_ftinesses)
 	{
 		int count = 0;
 
@@ -114,8 +125,10 @@ public:
 			Fitness_index_pair* fip = fitnesses.top();
 
 			int individual_index = fitnesses.top()->index;
-
 			fittest_individuals_indexes.push_back(individual_index);
+
+			int individual_fitness = fitnesses.top()->fitness;
+			fittest_individuals_ftinesses.push_back(individual_fitness);
 
 			store_individual(count, individual_index, next_gen, pop);
 			
@@ -150,18 +163,17 @@ public:
 		std::cout << "best_fitness " + std::to_string(best_fitness) << std::endl;
 		std::cout << "generation " + std::to_string(generations) << std::endl;
 
-		double total_fitness_sum = 0;
+		double total_fitness = 0;
 
 		for (int i = 0; i < population_size; i++)
 		{
 			int fitness = fitness_counter.count_fitness(i, next_gen);
+			total_fitness += fitness;
 			std::cout << " ind " + std::to_string(i) + " : " + std::to_string(fitness);
-
-			total_fitness_sum += fitness;
 		}
 
 		std::cout << " " << std::endl;
-		std::cout << "avg_fitness " + std::to_string((total_fitness_sum / (double)population_size)) << std::endl;
+		std::cout << "avg_fitness " + std::to_string((total_fitness / (double)population_size)) << std::endl;
 		std::cout << "" << std::endl;
 	}
 

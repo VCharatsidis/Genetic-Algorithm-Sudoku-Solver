@@ -5,6 +5,7 @@ class FitnessCounter
 public:
 
 	int sudoku_size;
+	double total_fitness;
 
 	int count_fitness(int individual, Population& pop)
 	{
