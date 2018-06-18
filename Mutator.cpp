@@ -30,7 +30,7 @@ public:
 
 		//we mutate all except the best individuals
 
-		for (int individual = 10; individual < population_size; individual++)
+		for (int individual = 0; individual < population_size; individual++)
 		{
 			double prob = unif(eng);
 			
@@ -64,17 +64,23 @@ public:
 
 		int a = distr(eng);
 		int b = distr(eng);
+
+		while (a == b)
+		{
+			b = distr(eng);
+		}
+
 		int column_a = board.available_boxes[row][a];
 		int column_b = board.available_boxes[row][b];
 
-		double prob = unif(eng);
+		/*double prob = unif(eng);
 
-		if (prob > 0.7)
+		if (prob > 0.9)
 		{
 		double next = unif(eng);
 
 		column_b = mutate_neighbours(row, column_a, column_b, next);
-		}
+		}*/
 
 		int boxes[] = { column_a, column_b };
 

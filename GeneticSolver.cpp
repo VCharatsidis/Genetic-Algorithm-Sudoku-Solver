@@ -21,7 +21,7 @@ public:
 	const int sudoku_size = 9;
 
 	// hyperparameters
-	double mutation_rate = 0.3;
+	double mutation_rate = 0.6;
 	int total_breeders = 100;
 	int population_size = 500;
 	bool elitism = true;
@@ -78,10 +78,10 @@ public:
 
 		store_fittest_individuals(fitnesses, fittest_individuals_indexes, fittest_individuals_ftinesses);
 
-		//RouletteWheel roulette = RouletteWheel(crossOver, population_size, total_fitness, fittest_individuals_ftinesses);
-		//roulette.breed(fittest_individuals_indexes);
+		RouletteWheel roulette = RouletteWheel(crossOver, population_size, total_fitness, fittest_individuals_ftinesses);
+		roulette.breed(fittest_individuals_indexes);
 		//breeder->breed(fittest_individuals_indexes);
-		random_breeder->breed(fittest_individuals_indexes);
+		//random_breeder->breed(fittest_individuals_indexes);
 	}
 
 	void calculate_fitnesses(std::priority_queue<Fitness_index_pair*, vector<Fitness_index_pair*>, Comparator>& fitnesses)
@@ -158,6 +158,8 @@ public:
 	void print_info()
 	{
 		print_board(pop, 0);
+		print_board(pop, 1);
+		print_board(pop, 2);
 
 		std::cout << "fitness " + std::to_string(fitness_counter.count_fitness(0, pop)) << std::endl;
 		std::cout << "best_fitness " + std::to_string(best_fitness) << std::endl;

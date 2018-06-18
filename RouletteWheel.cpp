@@ -1,4 +1,5 @@
 #include "MateStrategy.cpp"
+#include <cmath> 
 
 class RouletteWheel
 {
@@ -31,11 +32,11 @@ public:
 		std::random_device rd;
 		std::mt19937 eng(rd());
 		std::uniform_real_distribution<double> unif(0, 1);
-		double value = unif(eng) * total_fitness;
+		double value = std::abs(unif(eng) * (total_fitness));
 
-		for (int i = 0; i < population_size/2; i++)
+		for (int i = 0; i < population_size; i++)
 		{
-			int fitness = fitnesses[i];
+			int fitness = std::abs(fitnesses[i]-2*fitnesses[499]);
 			value -= fitness;
 
 			if (value < 0)
