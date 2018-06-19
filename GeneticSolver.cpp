@@ -158,10 +158,9 @@ public:
 	void print_info()
 	{
 		print_board(pop, 0);
-		print_board(pop, 1);
-		print_board(pop, 2);
-
 		std::cout << "fitness " + std::to_string(fitness_counter.count_fitness(0, pop)) << std::endl;
+		print_board(pop, 1);
+
 		std::cout << "best_fitness " + std::to_string(best_fitness) << std::endl;
 		std::cout << "generation " + std::to_string(generations) << std::endl;
 

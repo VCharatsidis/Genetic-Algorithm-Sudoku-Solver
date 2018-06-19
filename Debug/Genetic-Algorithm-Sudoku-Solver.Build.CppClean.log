@@ -1,24 +1,24 @@
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\vc141.pdb
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\vc141.idb
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\board.obj
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\box.obj
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\comparator.obj
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\crossover.obj
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\fitness_counter.obj
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\geneticsolver.obj
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\main.obj
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\matestrategy.obj
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\mutator.obj
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\patriarchmatingstrategy.obj
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\population.obj
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\almostrandom.obj
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\roulettewheel.obj
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\debug\genetic-algorithm-sudoku-solver.ilk
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\debug\genetic-algorithm-sudoku-solver.exe
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\debug\genetic-algorithm-sudoku-solver.pdb
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\genetic-.00f71e8b.tlog\cl.command.1.tlog
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\genetic-.00f71e8b.tlog\cl.read.1.tlog
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\genetic-.00f71e8b.tlog\cl.write.1.tlog
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\genetic-.00f71e8b.tlog\link.command.1.tlog
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\genetic-.00f71e8b.tlog\link.read.1.tlog
-c:\users\vcharatsidis\documents\visual studio 2017\projects\genetic-algorithm-sudoku-solver\genetic-algorithm-sudoku-solver\debug\genetic-.00f71e8b.tlog\link.write.1.tlog
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\vc141.pdb
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\vc141.idb
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\roulettewheel.obj
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\almostrandom.obj
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\population.obj
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\patriarchmatingstrategy.obj
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\mutator.obj
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\matestrategy.obj
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\main.obj
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\geneticsolver.obj
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\fitness_counter.obj
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\crossover.obj
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\comparator.obj
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\box.obj
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\board.obj
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\genetic-algorithm-sudoku-solver.ilk
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\genetic-algorithm-sudoku-solver.exe
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\genetic-algorithm-sudoku-solver.pdb
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\genetic-.00f71e8b.tlog\cl.command.1.tlog
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\genetic-.00f71e8b.tlog\cl.read.1.tlog
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\genetic-.00f71e8b.tlog\cl.write.1.tlog
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\genetic-.00f71e8b.tlog\link.command.1.tlog
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\genetic-.00f71e8b.tlog\link.read.1.tlog
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\debug\genetic-.00f71e8b.tlog\link.write.1.tlog

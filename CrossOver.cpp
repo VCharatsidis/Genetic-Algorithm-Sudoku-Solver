@@ -28,7 +28,8 @@ public:
 
 	void cross_over(int parent_a, int parent_b, int child)
 	{
-		std::random_device rd;
+		copy_board(child, parent_a, parent_b);
+		/*std::random_device rd;
 		std::mt19937 eng(rd());
 	
 		double prob = unif(eng);
@@ -47,7 +48,7 @@ public:
 		else
 		{
 			copy_board(child, parent_b, parent_a);
-		}
+		}*/
 
 	}
 
