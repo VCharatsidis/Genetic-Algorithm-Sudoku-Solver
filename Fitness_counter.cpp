@@ -27,21 +27,26 @@ public:
 	int count_column_errors(int individual, Population& pop)
 	{
 		int column_errors = 0;
-		std::set<int> unique_values;
-
+		//std::set<int> unique_values;
+		
 		for (int column = 0; column < sudoku_size; column++)
 		{
-			unique_values.clear();
+			bool unique_values[] = { true, true, true, true, true, true, true, true, true };
 
 			for (int row = 0; row < sudoku_size; row++)
 			{
 				int value_box = get_value(individual, pop, row, column);
-				unique_values.insert(value_box);
+				unique_values[value_box-1] = false;
 			}
 
-			int column_er = (sudoku_size - unique_values.size());
+			for (int i = 0; i < sudoku_size; i++)
+			{
+				if (unique_values[i])
+				{
+					column_errors -= 1;
+				}
+			}
 
-			column_errors -= column_er;
 		}
 		
 		return column_errors;
@@ -56,7 +61,7 @@ public:
 		{
 			for (int column = 0; column < sudoku_size; column += container_size)
 			{
-				container_errors -= count_container_value_reapearences(individual, pop, row, column);
+				container_errors += count_container_value_reapearences(individual, pop, row, column);
 			}
 		}
 
@@ -66,21 +71,33 @@ public:
 	int count_container_value_reapearences(int individual, Population& pop, int container_starting_row, int container_starting_column)
 	{
 		int container_size = sqrt(sudoku_size);
-		std::set<int> unique_values;
+		//std::set<int> unique_values;
 		
 		int until_row = container_starting_row + container_size;
 		int until_column = container_starting_column + container_size;
+		bool unique_values[] = { true, true, true, true, true, true, true, true, true };
+
+		int errors = 0;
 
 		for (int i = container_starting_row; i < until_row; i++)
 		{
 			for (int j = container_starting_column; j < until_column; j++)
 			{
 				int value_box = get_value(individual, pop, i, j);
-				unique_values.insert(value_box);
+				unique_values[value_box-1] = false;
+				//unique_values.insert(value_box);
 			}
 		}
 
-		int errors = sudoku_size - unique_values.size();
+		for (int i = 0; i < sudoku_size; i++)
+		{
+			if (unique_values[i])
+			{
+				errors -= 1;
+			}
+		}
+
+		//int errors = sudoku_size - unique_values.size();
 
 		return errors;
 	}

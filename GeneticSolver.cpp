@@ -21,7 +21,7 @@ public:
 	const int sudoku_size = 9;
 
 	// hyperparameters
-	double mutation_rate = 0.15;
+	double mutation_rate = 0.3;
 	int total_breeders = 100;
 	int population_size = 500;
 	bool elitism = true;
