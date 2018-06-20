@@ -21,7 +21,7 @@ public:
 	const int sudoku_size = 9;
 
 	// hyperparameters
-	double mutation_rate = 0.6;
+	double mutation_rate = 0.15;
 	int total_breeders = 100;
 	int population_size = 500;
 	bool elitism = true;
@@ -47,6 +47,11 @@ public:
 		{
 			make_new_population();
 
+			if (generations % 200 == 0)
+			{
+				print_info();
+			}
+
 			mutator->make_mutations();
 
 			for (int i = 0; i < population_size; i++)
@@ -54,10 +59,7 @@ public:
 				store_individual(i, i, pop, next_gen);
 			}	
 
-			if (generations % 200 == 0) 
-			{
-				print_info();
-			}
+			
 
 			generations++;
 		}
@@ -170,7 +172,12 @@ public:
 		{
 			int fitness = fitness_counter.count_fitness(i, next_gen);
 			total_fitness += fitness;
-			std::cout << " ind " + std::to_string(i) + " : " + std::to_string(fitness);
+
+			if (i % 2 == 0)
+			{
+				std::cout << " ind " + std::to_string(i) + " : " + std::to_string(fitness);
+			}
+			
 		}
 
 		std::cout << " " << std::endl;

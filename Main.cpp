@@ -90,50 +90,17 @@ int main()
 	//	cout << "" << endl;
 	//}
 
-	/*Population pop = Population(true);
-
+	/*Board board = Board();
+	Population pop = Population(true);*/
 	GeneticSolver solver = GeneticSolver();
-	print(solver.pop, 0);
-	cout << "fitness " + std::to_string(solver.count_fitness(0, solver.pop)) << endl;
-	std::cout << "" << std::endl;
 
-	print(solver.pop, 1);
-	cout << "fitness " + std::to_string(solver.count_fitness(1, solver.pop)) << endl;
-	std::cout << "" << std::endl;*/
-	//solver.cross_over(0, 2, 99);
-	//print(solver.pop, 99);
+	/*solver.print_board(pop, 0);
+	FitnessCounter fc = FitnessCounter();
+	
+	int kati = fc.count_fitness(0,pop);
+	cout << "fitness " + std::to_string(fc.count_column_errors(0, pop)) << endl;*/
 
-	/*solver.make_new_population();
-
-	print(solver.next_gen, 0);
-	cout << "new fitness " + std::to_string(solver.count_fitness(0, solver.next_gen)) << endl;
-	std::cout << "" << std::endl;
-
-	solver.swap(0, 0);
-
-	print(solver.next_gen, 0);
-	cout << "new fitness " + std::to_string(solver.count_fitness(0, solver.next_gen)) << endl;
-	std::cout << "" << std::endl;*/
-
-	/*print(solver.next_gen, 1);
-	cout << "new fitness " + std::to_string(solver.count_fitness(1, solver.next_gen)) << endl;
-	std::cout << "" << std::endl;
-
-	print(solver.next_gen, 25);
-	cout << "children " + std::to_string(solver.count_fitness(25, solver.next_gen)) << endl;
-	std::cout << "" << std::endl;
-
-	solver.solve();*/
-	/*Board b = Board();
-	for (int i = 0; i < b.size; i++)
-	{
-		for (int j = 0; j < b.available_boxes[i].size(); j++)
-		{
-			cout << std::to_string(b.available_boxes[i][j])+" ";
-		}
-		cout << "" << endl;
-	}*/
-	GeneticSolver solver = GeneticSolver();
+	
 	/*solver.make_new_population();
 	solver.print(solver.next_gen, 0);
 	solver.mutate(0);

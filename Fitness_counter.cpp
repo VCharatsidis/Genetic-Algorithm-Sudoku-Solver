@@ -1,4 +1,5 @@
 #include "Population.cpp"
+#include <set>
 
 class FitnessCounter
 {
@@ -26,77 +27,62 @@ public:
 	int count_column_errors(int individual, Population& pop)
 	{
 		int column_errors = 0;
+		std::set<int> unique_values;
 
 		for (int column = 0; column < sudoku_size; column++)
 		{
-			for (int box = 0; box < sudoku_size - 1; box++)
+			unique_values.clear();
+
+			for (int row = 0; row < sudoku_size; row++)
 			{
-				int value_box = get_value(individual, pop, box, column);
-
-				for (int other_box = box + 1; other_box < sudoku_size; other_box++)
-				{
-					int value_other = get_value(individual, pop, other_box, column);
-
-					if (value_box == value_other)
-					{
-						column_errors--;
-					}
-				}
+				int value_box = get_value(individual, pop, row, column);
+				unique_values.insert(value_box);
 			}
-		}
 
+			int column_er = (sudoku_size - unique_values.size());
+
+			column_errors -= column_er;
+		}
+		
 		return column_errors;
 	}
 
 	int count_container_errors(int individual, Population& pop)
 	{
+		int container_size = sqrt(sudoku_size);
 		int container_errors = 0;
-
-		for (int row = 0; row < sudoku_size; row++)
+		
+		for (int row = 0; row < sudoku_size; row += container_size)
 		{
-			for (int column = 0; column < sudoku_size; column++)
+			for (int column = 0; column < sudoku_size; column += container_size)
 			{
-				container_errors += count_container_value_reapearences(individual, pop, row, column);
+				container_errors -= count_container_value_reapearences(individual, pop, row, column);
 			}
 		}
 
 		return container_errors;
 	}
 
-	int count_container_value_reapearences(int individual, Population& pop, int row, int column)
+	int count_container_value_reapearences(int individual, Population& pop, int container_starting_row, int container_starting_column)
 	{
-		int value_reapearences = 0;
 		int container_size = sqrt(sudoku_size);
-		int value_box = get_value(individual, pop, row, column);
+		std::set<int> unique_values;
+		
+		int until_row = container_starting_row + container_size;
+		int until_column = container_starting_column + container_size;
 
-		int container_starting_row = find_container_starting_box(row, column)[0];
-		int container_starting_column = find_container_starting_box(row, column)[1];
-
-		int end_row = container_size + container_starting_row;
-		int end_col = container_size + container_starting_column;
-
-		for (int other_row = row; other_row < end_row; other_row++)
+		for (int i = container_starting_row; i < until_row; i++)
 		{
-			for (int other_column = container_starting_column; other_column < end_col; other_column++)
+			for (int j = container_starting_column; j < until_column; j++)
 			{
-				if ((row == other_row) && (column == other_column)) {
-					continue;
-				}
-				else
-				{
-					int value_other = get_value(individual, pop, other_row, other_column);
-
-					bool reapearance = (value_box == value_other);
-
-					if (reapearance)
-					{
-						value_reapearences--;
-					}
-				}
+				int value_box = get_value(individual, pop, i, j);
+				unique_values.insert(value_box);
 			}
 		}
 
-		return value_reapearences;
+		int errors = sudoku_size - unique_values.size();
+
+		return errors;
 	}
 
 	int* find_container_starting_box(int row, int column)
