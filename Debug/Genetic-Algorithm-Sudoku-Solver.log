@@ -3,18 +3,15 @@
   Comparator.cpp
   CrossOver.cpp
   Fitness_counter.cpp
-c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\fitness_counter.cpp(57): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\fitness_counter.cpp(73): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\fitness_counter.cpp(107): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\fitness_counter.cpp(59): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\fitness_counter.cpp(75): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   GeneticSolver.cpp
-c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\fitness_counter.cpp(57): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\fitness_counter.cpp(73): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\fitness_counter.cpp(107): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\fitness_counter.cpp(59): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\fitness_counter.cpp(75): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\geneticsolver.cpp(14): warning C4067: unexpected tokens following preprocessor directive - expected a newline
   Main.cpp
-c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\fitness_counter.cpp(57): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\fitness_counter.cpp(73): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\fitness_counter.cpp(107): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\fitness_counter.cpp(59): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\fitness_counter.cpp(75): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\geneticsolver.cpp(14): warning C4067: unexpected tokens following preprocessor directive - expected a newline
   MateStrategy.cpp
   Mutator.cpp

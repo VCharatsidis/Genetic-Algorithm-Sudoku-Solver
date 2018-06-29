@@ -15,7 +15,6 @@ public:
 	void breed(vector<int> fittest_individuals_indexes)
 	{
 		int total_children = 0;
-		//int max_children_per_breeder = (population_size / total_breeders);
 
 		while (total_children < population_size)
 		{
@@ -32,19 +31,19 @@ public:
 		std::random_device rd;
 		std::mt19937 eng(rd());
 		std::uniform_real_distribution<double> unif(0, 1);
-		double value = std::abs(unif(eng) * (total_fitness));
+
+		double value = unif(eng) * (total_fitness-55000);
 
 		for (int i = 0; i < population_size; i++)
 		{
-			int fitness = std::abs(fitnesses[i]-2*fitnesses[499]);
-			value -= fitness;
-
+			value -= (fitnesses[i]-110);
+			
 			if (value < 0)
 			{
 				return i;
 			}
 		}
 
-		return population_size - 1;
+		return 0;
 	}
 };

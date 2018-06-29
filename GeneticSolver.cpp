@@ -32,7 +32,7 @@ public:
 	CrossOver* crossOver = new CrossOver(pop, next_gen);
 
 	//Patriarch* breeder = new Patriarch(crossOver, total_breeders, pop.pop_size);
-	AlmostRandom* random_breeder = new AlmostRandom(crossOver, 200, pop.pop_size, elitism);
+	//AlmostRandom* random_breeder = new AlmostRandom(crossOver, 200, pop.pop_size, elitism);
 
 	FitnessCounter fitness_counter;
 
@@ -47,19 +47,12 @@ public:
 		{
 			make_new_population();
 
-			if (generations % 200 == 0)
-			{
-				print_info();
-			}
-
 			mutator->make_mutations();
 
 			for (int i = 0; i < population_size; i++)
 			{
 				store_individual(i, i, pop, next_gen);
 			}	
-
-			
 
 			generations++;
 		}
@@ -73,13 +66,15 @@ public:
 
 		calculate_fitnesses(fitnesses);
 
-		//we keep the first 25 fittest from the last generation
-
 		vector<int> fittest_individuals_indexes;
 		vector<int> fittest_individuals_ftinesses;
 
 		store_fittest_individuals(fitnesses, fittest_individuals_indexes, fittest_individuals_ftinesses);
 
+		if (generations % 200 == 0)
+		{
+			print_info();
+		}
 		RouletteWheel roulette = RouletteWheel(crossOver, population_size, total_fitness, fittest_individuals_ftinesses);
 		roulette.breed(fittest_individuals_indexes);
 		//breeder->breed(fittest_individuals_indexes);
@@ -92,6 +87,7 @@ public:
 		// so if we use elitism and chose to not mutate the top x individuals
 		// they will never change.
 		total_fitness = 0;
+
 		for (int i = (population_size-1); i >= 0; i--)
 		{
 			Fitness_index_pair* fi = new Fitness_index_pair();
@@ -102,7 +98,7 @@ public:
 			fi->fitness = fitness;
 			fi->index = i;
 			
-			if (fitness == 0)
+			if (fitness == 162)
 			{
 				std::cout << "solution is individual " + std::to_string(i) << std::endl;
 				solved = true;
@@ -112,9 +108,10 @@ public:
 			{
 				best_fitness = fitness;
 			}
-
+			
 			fitnesses.push(fi);
 		}
+		
 	}
 
 	void store_fittest_individuals(std::priority_queue<Fitness_index_pair*, vector<Fitness_index_pair*>, Comparator>& fitnesses, 
@@ -173,10 +170,10 @@ public:
 			int fitness = fitness_counter.count_fitness(i, next_gen);
 			total_fitness += fitness;
 
-			if (i % 2 == 0)
-			{
+			//if (i <100)
+			//{
 				std::cout << " ind " + std::to_string(i) + " : " + std::to_string(fitness);
-			}
+			//}
 			
 		}
 
