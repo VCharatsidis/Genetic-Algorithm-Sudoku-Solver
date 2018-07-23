@@ -16,6 +16,7 @@ public:
 	Population& next_gen;
 	int population_size;
 	double mutation_rate;
+	int mutated_boards = 0;
 	std::random_device rd;
 
 	Mutator(Population& population, Population& next_gen, double mt) : pop(population), mutation_rate(mt), next_gen(next_gen)
@@ -25,17 +26,17 @@ public:
 
 	void make_mutations()
 	{
-		std::mt19937 eng(rd());
+		mutated_boards = 0;
 		std::uniform_real_distribution<double> unif(0, 1);
-
-		//we mutate all except the best individuals
 
 		for (int individual = 0; individual < population_size; individual++)
 		{
+			std::mt19937 eng(rd());
 			double prob = unif(eng);
 			
 			if (prob < mutation_rate)
 			{
+				mutated_boards++;
 				mutate(individual);
 			}
 		}

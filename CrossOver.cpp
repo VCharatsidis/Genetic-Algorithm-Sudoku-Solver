@@ -28,27 +28,16 @@ public:
 
 	void cross_over(int parent_a, int parent_b, int child)
 	{
-		copy_board(child, parent_a, parent_b);
-		/*std::random_device rd;
+		
+		int combination_matrix[6][3] = { { parent_a, parent_a, parent_b }, { parent_a, parent_b, parent_b }, { parent_a, parent_b, parent_a },
+									{ parent_b, parent_a, parent_a }, { parent_b, parent_a, parent_b }, { parent_b, parent_b, parent_a } };
+
+		std::random_device rd;
 		std::mt19937 eng(rd());
-	
-		double prob = unif(eng);
+		std::uniform_int_distribution<> combinations(0, 6 - 1);
 
-		bool top_6_rows_parent_a = false;
-
-		if (prob > 0.5)
-		{
-			top_6_rows_parent_a = true;
-		}
-
-		if (top_6_rows_parent_a)
-		{
-			copy_board(child, parent_a, parent_b);
-		}
-		else
-		{
-			copy_board(child, parent_b, parent_a);
-		}*/
+		int comb = combinations(eng);
+		copy_board(child, combination_matrix[comb][0], combination_matrix[comb][1], combination_matrix[comb][2]);
 
 	}
 
@@ -62,6 +51,24 @@ public:
 		for (int row = 6; row < sudoku_size; row++)
 		{
 			copy_row(row, child, parent_b);
+		}
+	}
+
+	void copy_board(int child, int parent_top, int parent_mid, int parent_bot)
+	{
+		for (int row = 0; row < 3; row++)
+		{
+			copy_row(row, child, parent_top);
+		}
+
+		for (int row = 3; row < 6; row++)
+		{
+			copy_row(row, child, parent_mid);
+		}
+
+		for (int row = 6; row < sudoku_size; row++)
+		{
+			copy_row(row, child, parent_bot);
 		}
 	}
 

@@ -21,9 +21,10 @@ public:
 	const int sudoku_size = 9;
 
 	// hyperparameters
-	double mutation_rate = 0.3;
+	double mutation_rate = 0.05;
 	int total_breeders = 100;
-	int population_size = 500;
+	int population_size = 700;
+	int mutated_boards = 0;
 	bool elitism = true;
 
 	Population pop = new Population(true);
@@ -71,7 +72,7 @@ public:
 
 		store_fittest_individuals(fitnesses, fittest_individuals_indexes, fittest_individuals_ftinesses);
 
-		if (generations % 200 == 0)
+		if (generations % 300 == 0)
 		{
 			print_info();
 		}
@@ -156,30 +157,67 @@ public:
 
 	void print_info()
 	{
-		print_board(pop, 0);
-		std::cout << "fitness " + std::to_string(fitness_counter.count_fitness(0, pop)) << std::endl;
-		print_board(pop, 1);
-
+		print_board(next_gen, 0);
+		std::cout << "fitness 0 : " + std::to_string(fitness_counter.count_fitness(0, next_gen)) << std::endl;
+		print_board(next_gen, 1);
+		std::cout << "fitness 1 : " + std::to_string(fitness_counter.count_fitness(1, next_gen)) << std::endl;
+		std::cout << "mutated_boards " + std::to_string(mutator->mutated_boards) << std::endl;
 		std::cout << "best_fitness " + std::to_string(best_fitness) << std::endl;
+		std::cout << "distinct boards in the firs 10 : " + std::to_string(compare_boards(10)) << std::endl;
 		std::cout << "generation " + std::to_string(generations) << std::endl;
 
 		double total_fitness = 0;
+		int individuals_to_print = 200;
 
 		for (int i = 0; i < population_size; i++)
 		{
 			int fitness = fitness_counter.count_fitness(i, next_gen);
 			total_fitness += fitness;
 
-			//if (i <100)
-			//{
+			if (i < individuals_to_print)
+			{
 				std::cout << " ind " + std::to_string(i) + " : " + std::to_string(fitness);
-			//}
+			}
 			
 		}
 
 		std::cout << " " << std::endl;
 		std::cout << "avg_fitness " + std::to_string((total_fitness / (double)population_size)) << std::endl;
 		std::cout << "" << std::endl;
+	}
+
+	int compare_boards(int comparisons)
+	{
+		int distinct_boards = comparisons;
+
+		for (int i = 0; i < comparisons-1; i++)
+		{
+			for (int j = i+1; j < comparisons; j++)
+			{
+				if (same_boards(i, j))
+				{
+					distinct_boards--;
+				}
+			}
+		}
+
+		return distinct_boards;
+	}
+
+	bool same_boards(int a, int b)
+	{
+		for (int row = 0; row < sudoku_size; row++)
+		{
+			for (int col = 0; col < sudoku_size; col++)
+			{
+				if (next_gen.population[a][row][col] != next_gen.population[b][row][col])
+				{
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	void print_board(Population b, int individual)

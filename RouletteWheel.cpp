@@ -32,11 +32,12 @@ public:
 		std::mt19937 eng(rd());
 		std::uniform_real_distribution<double> unif(0, 1);
 
-		double value = unif(eng) * (total_fitness-55000);
+		int prob_manipulation = 40;
+		double value = unif(eng) * (total_fitness-(population_size * prob_manipulation));
 
 		for (int i = 0; i < population_size; i++)
 		{
-			value -= (fitnesses[i]-110);
+			value -= (fitnesses[i]- prob_manipulation);
 			
 			if (value < 0)
 			{
