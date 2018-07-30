@@ -8,13 +8,14 @@ public:
 	int population_size;
 	double total_fitness;
 	vector<int> fitnesses;
+	int elites;
 
-	RouletteWheel(CrossOver* co, int pop_size, double total_fitness, vector<int> fitnesses)
-		:  population_size(pop_size), crossOver(co), total_fitness(total_fitness), fitnesses(fitnesses) {};
+	RouletteWheel(CrossOver* co, int pop_size, double total_fitness, vector<int> fitnesses, int elites)
+		:  population_size(pop_size), crossOver(co), total_fitness(total_fitness), fitnesses(fitnesses), elites(elites) {};
 
 	void breed(vector<int> fittest_individuals_indexes)
 	{
-		int total_children = 0;
+		int total_children = elites;
 
 		while (total_children < population_size)
 		{
@@ -32,19 +33,22 @@ public:
 		std::mt19937 eng(rd());
 		std::uniform_real_distribution<double> unif(0, 1);
 
-		int prob_manipulation = 40;
-		double value = unif(eng) * (total_fitness-(population_size * prob_manipulation));
+		int selection_pressure = 10;
+		double value = unif(eng) * (total_fitness-(population_size * selection_pressure));
 
-		for (int i = 0; i < population_size; i++)
+		while (value >= 0)
 		{
-			value -= (fitnesses[i]- prob_manipulation);
-			
-			if (value < 0)
+			for (int i = 0; i < population_size; i++)
 			{
-				return i;
+				value -= (fitnesses[i] - selection_pressure);
+
+				if (value < 0)
+				{
+					return i;
+				}
 			}
 		}
-
+		
 		return 0;
 	}
 };

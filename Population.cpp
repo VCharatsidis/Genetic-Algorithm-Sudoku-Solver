@@ -9,8 +9,8 @@ class Population
 public:
 	
 	int sudoku_size = 9;
-	const int pop_size = 700;
-	Box* population [700][9][9];
+	const int pop_size = 1000;
+	Box* population [1000][9][9];
 
 	Population(bool initialize)
 	{

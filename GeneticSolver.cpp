@@ -21,11 +21,11 @@ public:
 	const int sudoku_size = 9;
 
 	// hyperparameters
-	double mutation_rate = 0.05;
+	double mutation_rate = 0.07;
 	int total_breeders = 100;
-	int population_size = 700;
+	int population_size = 1000;
 	int mutated_boards = 0;
-	bool elitism = true;
+	int elites = 150;
 
 	Population pop = new Population(true);
 	Population next_gen = new Population(true);
@@ -72,11 +72,48 @@ public:
 
 		store_fittest_individuals(fitnesses, fittest_individuals_indexes, fittest_individuals_ftinesses);
 
+		if (elites > 0)
+		{
+			int elites_stored = 0;
+			int next_indiv = 0;
+
+			while(elites_stored < elites)
+			{
+				bool elite_exists = false;
+
+				if (elites_stored > 0)
+				{
+					for (int stored = 0; stored < elites_stored; stored++)
+					{
+						if (same_boards(stored, fittest_individuals_indexes[next_indiv], next_gen, pop))
+						{
+							elite_exists = true;
+							break;
+						}
+					}
+				}
+				
+				if (!elite_exists)
+				{
+					for (int row = 0; row < sudoku_size; row++)
+					{
+						crossOver->copy_row(row, elites_stored, fittest_individuals_indexes[next_indiv]);
+					}
+
+					elites_stored++;
+				}	
+
+				next_indiv++;
+			}
+		}
+
 		if (generations % 300 == 0)
 		{
 			print_info();
 		}
-		RouletteWheel roulette = RouletteWheel(crossOver, population_size, total_fitness, fittest_individuals_ftinesses);
+
+		RouletteWheel roulette = RouletteWheel(crossOver, population_size, total_fitness, fittest_individuals_ftinesses, elites);
+
 		roulette.breed(fittest_individuals_indexes);
 		//breeder->breed(fittest_individuals_indexes);
 		//random_breeder->breed(fittest_individuals_indexes);
@@ -139,7 +176,7 @@ public:
 		}
 	}
 
-	void store_individual(int individual, int index, Population a, Population b)
+	void store_individual(int individual, int index, Population& a, Population& b)
 	{
 		for (int i = 0; i < sudoku_size; i++)
 		{
@@ -163,7 +200,12 @@ public:
 		std::cout << "fitness 1 : " + std::to_string(fitness_counter.count_fitness(1, next_gen)) << std::endl;
 		std::cout << "mutated_boards " + std::to_string(mutator->mutated_boards) << std::endl;
 		std::cout << "best_fitness " + std::to_string(best_fitness) << std::endl;
-		std::cout << "distinct boards in the firs 10 : " + std::to_string(compare_boards(10)) << std::endl;
+		std::cout << "distinct boards in the first 5 : " + std::to_string(compare_boards(5, next_gen, next_gen)) << std::endl;
+		std::cout << "distinct boards in the first 10 : " + std::to_string(compare_boards(10, next_gen, next_gen)) << std::endl;
+		std::cout << "distinct boards in the first 20 : " + std::to_string(compare_boards(20, next_gen, next_gen)) << std::endl;
+		std::cout << "distinct boards in the first 50 : " + std::to_string(compare_boards(50, next_gen, next_gen)) << std::endl;
+		std::cout << "distinct boards in the first 100 : " + std::to_string(compare_boards(100, next_gen, next_gen)) << std::endl;
+		std::cout << "distinct boards in the first "+ std::to_string(population_size)+" : " + std::to_string(compare_boards(population_size, next_gen, next_gen)) << std::endl;
 		std::cout << "generation " + std::to_string(generations) << std::endl;
 
 		double total_fitness = 0;
@@ -186,17 +228,23 @@ public:
 		std::cout << "" << std::endl;
 	}
 
-	int compare_boards(int comparisons)
+	int compare_boards(int comparisons, Population& pop_a, Population& pop_b)
 	{
 		int distinct_boards = comparisons;
+		vector<int> skip_boards;
 
 		for (int i = 0; i < comparisons-1; i++)
 		{
+			if (std::find(skip_boards.begin(), skip_boards.end(), i) != skip_boards.end()) {
+				continue;
+			}
+
 			for (int j = i+1; j < comparisons; j++)
 			{
-				if (same_boards(i, j))
+				if (same_boards(i, j, pop_a, pop_b))
 				{
 					distinct_boards--;
+					skip_boards.push_back(j);
 				}
 			}
 		}
@@ -204,13 +252,16 @@ public:
 		return distinct_boards;
 	}
 
-	bool same_boards(int a, int b)
+	bool same_boards(int a, int b, Population& pop_a, Population& pop_b)
 	{
 		for (int row = 0; row < sudoku_size; row++)
 		{
 			for (int col = 0; col < sudoku_size; col++)
 			{
-				if (next_gen.population[a][row][col] != next_gen.population[b][row][col])
+				int value_a = pop_a.population[a][row][col]->value;
+				int value_b = pop_b.population[b][row][col]->value;
+
+				if (value_a != value_b)
 				{
 					return false;
 				}
@@ -220,7 +271,7 @@ public:
 		return true;
 	}
 
-	void print_board(Population b, int individual)
+	void print_board(Population& b, int individual)
 	{
 		std::cout << "Individual " + std::to_string(individual) << std::endl;
 		for (int i = 0; i < b.sudoku_size; i++)

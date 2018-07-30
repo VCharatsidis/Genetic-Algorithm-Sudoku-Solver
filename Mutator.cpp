@@ -17,7 +17,6 @@ public:
 	int population_size;
 	double mutation_rate;
 	int mutated_boards = 0;
-	std::random_device rd;
 
 	Mutator(Population& population, Population& next_gen, double mt) : pop(population), mutation_rate(mt), next_gen(next_gen)
 	{
@@ -31,6 +30,7 @@ public:
 
 		for (int individual = 0; individual < population_size; individual++)
 		{
+			std::random_device rd;
 			std::mt19937 eng(rd());
 			double prob = unif(eng);
 			
@@ -45,7 +45,7 @@ public:
 	void mutate(int individual)
 	{
 		int sudoku_size = board.size;
-
+		std::random_device rd;
 		std::mt19937 eng(rd());
 		std::uniform_int_distribution<> distr(0, sudoku_size - 1);
 
@@ -58,10 +58,10 @@ public:
 	int* choose_boxes_to_swap(int row, int individual)
 	{
 		int number_av_values = board.available_boxes[row].size();
-
+		std::random_device rd;
 		std::mt19937 eng(rd());
 		std::uniform_int_distribution<> distr(0, number_av_values - 1);
-		std::uniform_real_distribution<double> unif(0, 1);
+		//std::uniform_real_distribution<double> unif(0, 1);
 
 		int a = distr(eng);
 		int b = distr(eng);
