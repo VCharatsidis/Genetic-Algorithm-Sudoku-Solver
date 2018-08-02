@@ -104,4 +104,34 @@ public:
 	{
 		return pop.population[individual][row][column]->value;
 	}
+
+	void print_board(Population& b, int individual)
+	{
+		std::cout << "Individual " + std::to_string(individual) << std::endl;
+		for (int i = 0; i < b.sudoku_size; i++)
+		{
+			for (int j = 0; j < b.sudoku_size; j++)
+			{
+				int val = b.population[individual][i][j]->value;
+
+				if (val == 0)
+				{
+					std::cout << " _ ";
+				}
+				else
+				{
+					if (b.population[individual][i][j]->fixed)
+					{
+						std::cout << " " + std::to_string(val) + "'";
+					}
+					else
+					{
+						std::cout << " " + std::to_string(val) + " ";
+					}
+				}
+			}
+
+			std::cout << "" << std::endl;
+		}
+	}
 };
