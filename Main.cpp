@@ -107,5 +107,6 @@ int main()
 	solver.print(solver.next_gen, 0);*/
 
 	solver.solve();
+	cout << "solved " << endl;
 	return 0;
 }

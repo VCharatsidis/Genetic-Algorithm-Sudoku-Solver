@@ -33,6 +33,7 @@ public:
 		}
 		
 		make_hardest_sudoku();
+		//make_easy_sudoku();
 
 		for (int i = 0; i < size; i++) 
 		{

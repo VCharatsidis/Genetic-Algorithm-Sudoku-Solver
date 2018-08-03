@@ -21,11 +21,12 @@ public:
 	const int sudoku_size = 9;
 
 	// hyperparameters
-	double mutation_rate = 0.15;
+	double mutation_rate = 0.09;
 	int total_breeders = 100;
 	int population_size = 1000;
 	int mutated_boards = 0;
-	int elites = (population_size/4);
+	int elites = (500);
+	double best_avg_fitness = 0;
 
 	Population pop = new Population(true);
 	Population next_gen = new Population(true);
@@ -139,6 +140,7 @@ public:
 			if (fitness == 162)
 			{
 				std::cout << "solution is individual " + std::to_string(i) << std::endl;
+				std::cout << "generation " + std::to_string(generations) << std::endl;
 				solved = true;
 			}
 
@@ -200,15 +202,25 @@ public:
 		std::cout << "fitness 1 : " + std::to_string(fitness_counter.count_fitness(1, next_gen)) << std::endl;
 		std::cout << "mutated_boards " + std::to_string(mutator->mutated_boards) << std::endl;
 		std::cout << "best_fitness " + std::to_string(best_fitness) << std::endl;
-		std::cout << "distinct boards in the first 20 : " + std::to_string(compare_boards(20, next_gen, next_gen)) << std::endl;
-		std::cout << "distinct boards in the elites "+ std::to_string(elites) +" : " + std::to_string(compare_boards(elites, next_gen, next_gen)) << std::endl;
-		std::cout << "distinct boards in the first "+ std::to_string(population_size)+" : " + std::to_string(compare_boards(population_size, next_gen, next_gen)) << std::endl;
+		
+		if (elites == 0)
+		{
+			std::cout << "distinct boards in the first 20 : " + std::to_string(compare_boards(20, next_gen, next_gen)) << std::endl;
+			std::cout << "distinct boards in the first 100 : " + std::to_string(compare_boards(100, next_gen, next_gen)) << std::endl;
+		}
+		else
+		{
+			std::cout << "fitness of the last elite " + std::to_string(elites) + " : " + std::to_string(fitness_counter.count_fitness(elites, next_gen)) << std::endl;
+			std::cout << "distinct boards in the elites " + std::to_string(elites) + " : " + std::to_string(compare_boards(elites, next_gen, next_gen)) << std::endl;
+		}
+		
+		std::cout << "unique boards in the population "+ std::to_string(population_size)+" : " + std::to_string(compare_boards(population_size, next_gen, next_gen)) << std::endl;
 		std::cout << "generation " + std::to_string(generations) << std::endl;
 
 		double total_fitness = 0;
-		double fitness160 = 0;
-		double fitness159 = 0;
-		double fitness158 = 0;
+		int fitness160 = 0;
+		int fitness159 = 0;
+		int fitness158 = 0;
 		int individuals_to_print = 200;
 
 		for (int i = 0; i < population_size; i++)
@@ -229,6 +241,7 @@ public:
 			{
 				fitness158++;
 			}
+
 			total_fitness += fitness;
 
 			if (i < individuals_to_print)
@@ -237,11 +250,20 @@ public:
 			}
 			
 		}
+		std::cout << " " << std::endl;
 		std::cout << "fitness 160 indivs : " + std::to_string(fitness160) << std::endl;
 		std::cout << "fitness 159 indivs : " + std::to_string(fitness159) << std::endl;
 		std::cout << "fitness 158 indivs : " + std::to_string(fitness158) << std::endl;
-		std::cout << " " << std::endl;
-		std::cout << "avg_fitness " + std::to_string((total_fitness / (double)population_size)) << std::endl;
+	
+		double avg_fitness = total_fitness / (double)population_size;
+
+		if (avg_fitness > best_avg_fitness)
+		{
+			best_avg_fitness = avg_fitness;
+		}
+
+		std::cout << "avg_fitness " + std::to_string(avg_fitness) << std::endl;
+		std::cout << "best_avg_fitness " + std::to_string(best_avg_fitness) << std::endl;
 		std::cout << "" << std::endl;
 	}
 
