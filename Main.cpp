@@ -92,7 +92,7 @@ int main()
 
 	/*Board board = Board();
 	Population pop = Population(true);*/
-	GeneticSolver solver = GeneticSolver();
+	//GeneticSolver solver = GeneticSolver();
 
 	/*solver.print_board(pop, 0);
 	FitnessCounter fc = FitnessCounter();
@@ -105,8 +105,28 @@ int main()
 	solver.print(solver.next_gen, 0);
 	solver.mutate(0);
 	solver.print(solver.next_gen, 0);*/
+	vector<double> avg_fitnesses;
+	int runs = 1;
+	while (true)
+	{
+		cout << "-------------------------------------------------run : "+std::to_string(runs)+" ---------------------------------------" << endl;
 
-	solver.solve();
+		GeneticSolver solver = GeneticSolver();
+		solver.solve();
+		
+		if (solver.solved)
+		{
+			break;
+		}
+		runs++;
+		avg_fitnesses.push_back(solver.best_avg_fitness);
+
+		for (int i = 0; i < avg_fitnesses.size(); i++)
+		{
+			cout << " run " + std::to_string(i) + std::to_string(avg_fitnesses[i]) +" , ";
+		}
+	}
+	
 	cout << "solved " << endl;
 	return 0;
 }

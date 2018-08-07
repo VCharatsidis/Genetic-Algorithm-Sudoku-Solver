@@ -21,11 +21,11 @@ public:
 	const int sudoku_size = 9;
 
 	// hyperparameters
-	double mutation_rate = 0.09;
+	double mutation_rate = 0.15;
 	int total_breeders = 100;
 	int population_size = 1000;
 	int mutated_boards = 0;
-	int elites = (500);
+	int elites = (200);
 	double best_avg_fitness = 0;
 
 	Population pop = new Population(true);
@@ -45,7 +45,7 @@ public:
 	
 	void solve() 
 	{
-		while (!solved) 
+		while (!solved && generations < 3501) 
 		{
 			make_new_population();
 
@@ -108,7 +108,7 @@ public:
 			}
 		}
 
-		if (generations % 300 == 0)
+		if (generations % 500 == 0)
 		{
 			print_info();
 		}
@@ -210,7 +210,7 @@ public:
 		}
 		else
 		{
-			std::cout << "fitness of the last elite " + std::to_string(elites) + " : " + std::to_string(fitness_counter.count_fitness(elites, next_gen)) << std::endl;
+			std::cout << "fitness of the last elite " + std::to_string(elites-1) + " : " + std::to_string(fitness_counter.count_fitness(elites-1, next_gen)) << std::endl;
 			std::cout << "distinct boards in the elites " + std::to_string(elites) + " : " + std::to_string(compare_boards(elites, next_gen, next_gen)) << std::endl;
 		}
 		
@@ -221,7 +221,7 @@ public:
 		int fitness160 = 0;
 		int fitness159 = 0;
 		int fitness158 = 0;
-		int individuals_to_print = 200;
+		int individuals_to_print = 20;
 
 		for (int i = 0; i < population_size; i++)
 		{
