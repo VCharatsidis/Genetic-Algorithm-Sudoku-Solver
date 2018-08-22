@@ -14,6 +14,8 @@ CrossOver: The parents are choosen with roullette wheel.
         
 Mutation: The mutation is done by swaping 2 elements in one of the rows. Of course i do not swap fixed elements. A good mutation rate is 15%
 
-So far the best result achieved is 2 errors. So 2 missing values in all columns and container boxes.
+The easy sudoku is solved pretty fast.
+The hard sudoku is not solved.
+So far the best result in the hard sudoku is 2 errors. So 2 missing values in all columns and container boxes.
 
            
