@@ -12,7 +12,7 @@ void print(Board b)
 	{
 		for (int j = 0; j < b.size; j++)
 		{
-			int val = b.boxes[i][j]->value;
+			int val = b.boxes[i][j].value;
 
 			if (val == 0)
 			{
@@ -20,7 +20,7 @@ void print(Board b)
 			}
 			else
 			{
-				if (b.boxes[i][j]->fixed) 
+				if (b.boxes[i][j].fixed) 
 				{
 					std::cout << " " + std::to_string(val) + "'";
 				}
@@ -44,7 +44,7 @@ void print(Population b, int individual)
 	{
 		for (int j = 0; j < b.sudoku_size; j++)
 		{
-			int val = b.population[individual][i][j]->value;
+			int val = b.population[individual][i][j].value;
 
 			if (val == 0)
 			{
@@ -52,7 +52,7 @@ void print(Population b, int individual)
 			}
 			else
 			{
-				if (b.population[individual][i][j]->fixed)
+				if (b.population[individual][i][j].fixed)
 				{
 					std::cout << " " + std::to_string(val) + "'";
 				}
@@ -109,24 +109,32 @@ int main()
 	int runs = 1;
 	while (true)
 	{
-		cout << "-------------------------------------------------run : "+std::to_string(runs)+" ---------------------------------------" << endl;
+		cout << "-------------------------------------------------run : "+std::to_string(runs)+" -----------------------------------------------------" << endl;
 
-		GeneticSolver solver = GeneticSolver();
-		solver.solve();
+		GeneticSolver* solver = new GeneticSolver();
+		solver->solve();
 		
-		if (solver.solved)
+		if (solver->solved)
 		{
 			break;
 		}
 		runs++;
-		avg_fitnesses.push_back(solver.best_avg_fitness);
+		avg_fitnesses.push_back(solver->best_avg_fitness);
 
+		double avg_fit_per_run = 0;
 		for (int i = 0; i < avg_fitnesses.size(); i++)
 		{
-			cout << " run " + std::to_string(i) + std::to_string(avg_fitnesses[i]) +" , ";
+			avg_fit_per_run += avg_fitnesses[i];
+			cout << " run " + std::to_string(i) +" : "+ std::to_string(avg_fitnesses[i]) +" , ";
 		}
+
+		cout << " " << endl;
+		cout << "average fitness in all runs "+std::to_string(avg_fit_per_run / avg_fitnesses.size()) << endl;
+
+		delete solver;
 	}
 	
 	cout << "solved " << endl;
+	getchar();
 	return 0;
 }

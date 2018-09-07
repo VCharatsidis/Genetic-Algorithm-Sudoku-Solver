@@ -21,15 +21,15 @@ public:
 	const int sudoku_size = 9;
 
 	// hyperparameters
-	double mutation_rate = 0.15;
+	double mutation_rate = 0.10;
 	int total_breeders = 100;
-	int population_size = 1000;
+	int population_size = 100;
 	int mutated_boards = 0;
-	int elites = (200);
+	int elites = (20);
 	double best_avg_fitness = 0;
 
-	Population pop = new Population(true);
-	Population next_gen = new Population(true);
+	Population pop =  Population(true);
+	Population next_gen =  Population(true);
 	Mutator* mutator = new Mutator(pop, next_gen, mutation_rate);
 	CrossOver* crossOver = new CrossOver(pop, next_gen);
 
@@ -45,8 +45,13 @@ public:
 	
 	void solve() 
 	{
-		while (!solved && generations < 3501) 
+		while (!solved && generations < 20001) 
 		{
+			if (generations > 7000 && best_fitness < 160)
+			{
+				break;
+			}
+
 			make_new_population();
 
 			mutator->make_mutations();
@@ -60,6 +65,10 @@ public:
 		}
 
 		print_board(next_gen, 0);
+		
+		//delete next_gen.population;
+		delete mutator;
+		delete crossOver;
 	}
 
 	void make_new_population()
@@ -108,7 +117,7 @@ public:
 			}
 		}
 
-		if (generations % 500 == 0)
+		if (generations % 1000 == 0)
 		{
 			print_info();
 		}
@@ -184,14 +193,14 @@ public:
 		{
 			for (int j = 0; j < sudoku_size; j++)
 			{
-				a.population[individual][i][j]->value = get_value(index, b, i, j);
+				a.population[individual][i][j].value = get_value(index, b, i, j);
 			}
 		}
 	}
 
 	int get_value(int individual, Population& pop, int row, int column)
 	{
-		return pop.population[individual][row][column]->value;
+		return pop.population[individual][row][column].value;
 	}
 
 	void print_info()
@@ -297,8 +306,8 @@ public:
 		{
 			for (int col = 0; col < sudoku_size; col++)
 			{
-				int value_a = pop_a.population[a][row][col]->value;
-				int value_b = pop_b.population[b][row][col]->value;
+				int value_a = pop_a.population[a][row][col].value;
+				int value_b = pop_b.population[b][row][col].value;
 
 				if (value_a != value_b)
 				{
@@ -317,7 +326,7 @@ public:
 		{
 			for (int j = 0; j < b.sudoku_size; j++)
 			{
-				int val = b.population[individual][i][j]->value;
+				int val = b.population[individual][i][j].value;
 
 				if (val == 0)
 				{
@@ -325,7 +334,7 @@ public:
 				}
 				else
 				{
-					if (b.population[individual][i][j]->fixed)
+					if (b.population[individual][i][j].fixed)
 					{
 						std::cout << " " + std::to_string(val) + "'";
 					}

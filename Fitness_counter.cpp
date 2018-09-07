@@ -102,7 +102,7 @@ public:
 
 	int get_value(int individual, Population& pop, int row, int column)
 	{
-		return pop.population[individual][row][column]->value;
+		return pop.population[individual][row][column].value;
 	}
 
 	void print_board(Population& b, int individual)
@@ -112,7 +112,7 @@ public:
 		{
 			for (int j = 0; j < b.sudoku_size; j++)
 			{
-				int val = b.population[individual][i][j]->value;
+				int val = b.population[individual][i][j].value;
 
 				if (val == 0)
 				{
@@ -120,7 +120,7 @@ public:
 				}
 				else
 				{
-					if (b.population[individual][i][j]->fixed)
+					if (b.population[individual][i][j].fixed)
 					{
 						std::cout << " " + std::to_string(val) + "'";
 					}

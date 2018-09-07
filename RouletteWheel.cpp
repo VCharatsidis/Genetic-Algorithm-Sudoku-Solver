@@ -33,7 +33,7 @@ public:
 		std::mt19937 eng(rd());
 		std::uniform_real_distribution<double> unif(0, 1);
 
-		int selection_pressure = 110;
+		int selection_pressure = 40;
 		double value = unif(eng) * (total_fitness-(population_size * selection_pressure));
 
 		while (value >= 0)

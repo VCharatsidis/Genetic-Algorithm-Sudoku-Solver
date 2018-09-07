@@ -123,11 +123,11 @@ public:
 
 	int check_fixed_and_assign(int row, int column_a, int column_b, int neighbour_1, int neighbour_2)
 	{
-		if (!board.boxes[row][column_a + neighbour_1]->fixed)
+		if (!board.boxes[row][column_a + neighbour_1].fixed)
 		{
 			column_b = column_a + neighbour_1;
 		}
-		else if (!board.boxes[row][column_a + neighbour_2]->fixed)
+		else if (!board.boxes[row][column_a + neighbour_2].fixed)
 		{
 			column_b = column_a + neighbour_2;
 		}
@@ -138,12 +138,12 @@ public:
 	void swap(int box_a, int box_b, int row, int individual)
 	{
 		int temp = get_value(individual, next_gen, row, box_a);
-		next_gen.population[individual][row][box_a]->value = get_value(individual, next_gen, row, box_b);
-		next_gen.population[individual][row][box_b]->value = temp;
+		next_gen.population[individual][row][box_a].value = get_value(individual, next_gen, row, box_b);
+		next_gen.population[individual][row][box_b].value = temp;
 	}
 
 	int get_value(int individual, Population& pop, int row, int column)
 	{
-		return pop.population[individual][row][column]->value;
+		return pop.population[individual][row][column].value;
 	}
 };

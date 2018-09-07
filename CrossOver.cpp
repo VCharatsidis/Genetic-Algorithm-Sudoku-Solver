@@ -76,13 +76,13 @@ public:
 	{
 		for (int j = 0; j < sudoku_size; j++)
 		{
-			next_gen.population[child][row][j]->value = get_value(parent, pop, row, j);
+			next_gen.population[child][row][j].value = get_value(parent, pop, row, j);
 		}
 	}
 
 	int get_value(int individual, Population& pop, int row, int column)
 	{
-		return pop.population[individual][row][column]->value;
+		return pop.population[individual][row][column].value;
 	}
 };
 #endif

@@ -13,7 +13,7 @@ c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\geneticsolver.
 c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\fitness_counter.cpp(59): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\fitness_counter.cpp(75): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\geneticsolver.cpp(14): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\main.cpp(124): warning C4018: '<': signed/unsigned mismatch
+c:\users\vcharatsidis\source\repos\sudokusolver-genetic-algorithm\main.cpp(125): warning C4018: '<': signed/unsigned mismatch
   MateStrategy.cpp
   Mutator.cpp
   PatriarchMatingStrategy.cpp
